@@ -10,6 +10,7 @@ module eight_bit_adder (x, y, carry_in, sum, carry_out);
 
    wire [6:0] carry_mid;
 
+   // sequentially connect eight one-bit full adders
    one_bit_adder FA0 (x[0], y[0], carry_in, sum[0], carry_mid[0]);
    one_bit_adder FA1 (x[1], y[1], carry_mid[0], sum[1], carry_mid[1]);
    one_bit_adder FA2 (x[2], y[2], carry_mid[1], sum[2], carry_mid[2]);
