@@ -5,15 +5,15 @@ module priority_encoder_top;
     reg [7:0] A;
     wire [2:0] B;
 
-    priority_encoder uut(A,B); // Initialising the priority encoder
+    priority_encoder UUT (A,B); // Instantiate the priority encoder
 
-    always @ (A or B) begin
-        #0
-        $display("%d : %b ? %b",$time,A,B);
+    always @(A or B) begin
+        // Display priority encoder inputs and outputs
+        $monitor("t = %d : Input - %b --> Encoder Output: %b", $time, A, B);
     end
 
+    // Test Cases
     initial begin
-        // Test Cases
         A = 8'b10000000;
         #1
         A = 8'b01000000;

@@ -2,17 +2,20 @@
 `include "A2Q1_encoder8to3.v"
 
 module autoencoder_top;
+
     reg[2:0] e_in;
     wire[2:0] e_out;
     wire[7:0] d_mid;
 
-    decoder3to8 DECODER (e_in, d_mid);
-    encoder8to3 ENCODER (d_mid, e_out);
+    decoder3to8 DECODER (e_in, d_mid);      // Instantiate decoder
+    encoder8to3 ENCODER (d_mid, e_out);     // Instantiate encoder
 
     always @ (e_in or d_mid or e_out) begin
-        $monitor("t = %d: Input - %b --> Decoded Repr: %b --> Re-encoded: %b", $time, e_in, d_mid, e_out);
+        // Display input, intermediate decoder output and final encoder output
+        $monitor("t = %d: Input - %b --> Decoded Output: %b --> Re-encoded Output: %b", $time, e_in, d_mid, e_out);
     end
 
+    // All 8 possible testcases
     initial begin
         e_in = 3'b000;
         #1
