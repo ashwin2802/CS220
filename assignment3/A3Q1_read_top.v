@@ -17,7 +17,7 @@ module read_top;
 
     always begin
         #5
-        clk = ~clk;
+        clk = ~clk;                   // Handling the clock and switching input_valid to 0 periodically as asked
         #5
         clk = ~clk;
         #3
@@ -43,39 +43,39 @@ module read_top;
 
     initial begin
         #3
-        row_num = 4'b0000;
+        row_num = 4'b0000;     // First test case sent at 3s, here no open row present so expected output at 15s after 1 cycle
         input_valid = 1;
 
+        #30
+        row_num = 4'b1111;    //  Input at 33s and row_num not equal to open row so ouput should occur at 35+20 = 55s
+        input_valid = 1;
+        
+        #30
+        row_num = 4'b1110;
+        input_valid = 1;
+        
+        #30
+        row_num = 4'b1010;
+        input_valid = 1;
+        
+        #30
+        row_num = 4'b1000;
+        input_valid = 1;
+        
+        #30
+        row_num = 4'b1000;   // Input at 153s, as open_row = row_num output should occur at 155s (the same cycle)
+        input_valid = 1;
+        
         #30
         row_num = 4'b1111;
         input_valid = 1;
         
         #30
-        row_num = 4'b1010;
+        row_num = 4'b0000;
         input_valid = 1;
         
         #30
-        row_num = 4'b1010;
-        input_valid = 1;
-        
-        #30
-        row_num = 4'b1010;
-        input_valid = 1;
-        
-        #30
-        row_num = 4'b1010;
-        input_valid = 1;
-        
-        #30
-        row_num = 4'b1010;
-        input_valid = 1;
-        
-        #30
-        row_num = 4'b1010;
-        input_valid = 1;
-        
-        #30
-        row_num = 4'b1010;
+        row_num = 4'b0000;    // Input at 243s, as open_row = row_num output should occur at 245s (the same cycle)
         input_valid = 1;
         
         #30

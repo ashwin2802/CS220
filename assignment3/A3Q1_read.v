@@ -6,8 +6,9 @@ module dram_bank(clk, row_num, input_valid, output_data, output_valid);
 
     reg [31:0] data [15:0];
     reg [3:0] open_row;
-    reg [1:0] wait_cycles;
-    reg r_en, w_en;
+    reg [1:0] wait_cycles;   //Needed to keep a count of number of cycles to wait according to the case
+    reg r_en, w_en;      // w_en acts as a switch to whether to give out an output if wait_cycle is 0 
+                         // r_en acts as a switch needed to handle when intially row_num is high impedence state
 
     initial begin
         data[0] <= 32'd0;
@@ -35,19 +36,19 @@ module dram_bank(clk, row_num, input_valid, output_data, output_valid);
 
     always @(posedge clk) begin
         if (input_valid) begin
-            if (r_en == 1'b0) begin
-                wait_cycles = 2'd1;
+            if (r_en == 1'b0) begin     //The case when no row is open
+                wait_cycles = 2'd1;     // Setting the cycles to wait = 1
                 open_row = row_num;
                 output_valid = 1'b0;
                 r_en = 1'b1;
                 w_en = 1'b1;
             end
-            else if (open_row == row_num) begin
-                wait_cycles = 2'd0;
+            else if (open_row == row_num) begin   //The case when the row reqeusted is equal to the open row
+                wait_cycles = 2'd0;    // Setting the cycles to wait = 0
                 w_en = 1'b1;
             end
-            else begin
-                wait_cycles = 2'd2;
+            else begin                  // The case when the requested row is not equal to currently open row
+                wait_cycles = 2'd2;     // Setting the cycles to wait = 2
                 open_row = row_num;
                 output_valid = 1'b0;
                 w_en = 1'b1;
@@ -55,10 +56,10 @@ module dram_bank(clk, row_num, input_valid, output_data, output_valid);
         end
 
         if (wait_cycles > 0) begin
-            wait_cycles = wait_cycles - 1;
+            wait_cycles = wait_cycles - 1;   // A decrementing counter that goes till 0
             output_valid = 1'b0;
         end 
-        else if (w_en == 1'b1) begin
+        else if (w_en == 1'b1) begin         // When wait_cycles = 0 and w_en switch is turned on
             output_data = data[row_num];
             output_valid = 1'b1;
             w_en = 1'b0;
