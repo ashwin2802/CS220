@@ -9,7 +9,7 @@ module read_top;
 
     dram_bank RAM (clk, row_num, input_valid, output_data, output_valid);
 
-    always @(posedge clk or output_data or output_valid) begin
+    always @(posedge clk & output_valid) begin
         if(output_valid == 1'b1) begin
             $display("t = %d: Row num - %d, Data - %d", $time, row_num, output_data);
         end
@@ -37,7 +37,7 @@ module read_top;
     initial begin
         clk = 1'b0;
         input_valid = 1'b0;
-        #100;
+        #300;
         $finish;
     end
 

@@ -20,7 +20,6 @@ module fsm_top;
     end
 
     // always @(posedge clk) begin
-    //     #0
     //     $display("t = %d: x - %d, y - %d", $time, x, y);
     // end
 
@@ -31,9 +30,9 @@ module fsm_top;
 
         #10 x=0;
 
-        #10 x=0;
+        #10 x=1;
 
-        #10 x=0;
+        #10 x=1;
 
         #10 x=1;
 

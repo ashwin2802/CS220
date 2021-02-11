@@ -5,9 +5,9 @@ module fsm(x, clk, y);
     reg [2:0] state, next_state;
 
     initial begin
-        state = 3'b000;
-        next_state = 3'b000;
-        y = 1'b1;
+        state <= 3'b000;
+        next_state <= 3'b000;
+        y <= 1'b1;
     end
 
     always @(posedge clk) begin 

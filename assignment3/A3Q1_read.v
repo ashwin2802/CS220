@@ -7,6 +7,7 @@ module dram_bank(clk, row_num, input_valid, output_data, output_valid);
     reg [31:0] data [15:0];
     reg [3:0] open_row;
     reg [1:0] wait_cycles;
+    reg r_en, w_en;
 
     initial begin
         data[0] <= 32'd0;
@@ -28,22 +29,28 @@ module dram_bank(clk, row_num, input_valid, output_data, output_valid);
 
         open_row <= 4'bZZZZ;
         wait_cycles <= 2'd1;
+        r_en <= 1'b0;
+        w_en <= 1'b0;
     end
 
     always @(posedge clk) begin
         if (input_valid) begin
-            if (open_row === 4'bZZZZ) begin
+            if (r_en == 1'b0) begin
                 wait_cycles = 2'd1;
                 open_row = row_num;
                 output_valid = 1'b0;
+                r_en = 1'b1;
+                w_en = 1'b1;
             end
             else if (open_row == row_num) begin
                 wait_cycles = 2'd0;
+                w_en = 1'b1;
             end
             else begin
                 wait_cycles = 2'd2;
                 open_row = row_num;
                 output_valid = 1'b0;
+                w_en = 1'b1;
             end
         end
 
@@ -51,10 +58,16 @@ module dram_bank(clk, row_num, input_valid, output_data, output_valid);
             wait_cycles = wait_cycles - 1;
             output_valid = 1'b0;
         end 
-        else begin
+        else if (w_en == 1'b1) begin
             output_data = data[row_num];
             output_valid = 1'b1;
+            w_en = 1'b0;
         end
+        else begin
+            output_valid = 1'b0;
+        end
+
+        // $display("[RAM] t = %d: %d %d %d %d\n", $time, input_valid, output_data, output_valid, wait_cycles);
     end
 
 endmodule
