@@ -15,7 +15,6 @@ module fsm(x, clk, y);
         state[1] <= (state[2] & state[1]) | (~state[2] & ~state[1] & x) | (state[2] & ~state[0] & x);
         state[0] <= ~state[0] | state[2] | (state[1] & x) | (~state[1] & state[0] & ~x);
 
-
     end
 
     assign y = ~state[2] | state[1] | ~state[0]; // Assigning solution to the output wire

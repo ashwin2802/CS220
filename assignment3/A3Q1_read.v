@@ -69,4 +69,10 @@ module dram_bank(clk, row_num, input_valid, output_data, output_valid);
             end
         end
     end
+
+    always @(negedge clk) begin
+        if (w_en == 1'b0) begin     // If there are no outputs to write, set output_valid to 0
+            output_valid <= 1'b0;
+        end
+    end
 endmodule
