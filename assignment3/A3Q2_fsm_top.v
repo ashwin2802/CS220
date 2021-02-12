@@ -15,12 +15,12 @@ module fsm_top;
     initial begin
         forever begin
             #5
-            clk = ~clk;     // Generating a clock
+            clk = ~clk;     // Generating a clock with clock cycle 10s
         end
     end
 
-      always @(posedge clk) begin
-        #0                                                 // Zero delay needed for correct output else a lag observed
+      always @(negedge clk) begin   // Printing the output at negedge
+                                    
         $display("t = %d: x - %d, y - %d", $time, x, y);   //Displaying the outputs
 
      end 
@@ -42,7 +42,7 @@ module fsm_top;
 
         #10 x=1;
 
-        #10 x=0;
+        #10 x=1;
 
         #10 x=1;
     end
