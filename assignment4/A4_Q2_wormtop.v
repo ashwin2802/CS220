@@ -2,9 +2,9 @@
 
 module worm_top;
     reg clk;
-    reg[5:0] in;
-    wire[5:0] out1;
-    wire[5:0] out2;
+    reg[3:0] in;
+    wire[4:0] out1;
+    wire[4:0] out2;
 
     worm a(in,clk,out1,out2);
 
@@ -25,21 +25,27 @@ module worm_top;
     end  
 
     initial begin
-        in <= 6'b000010;
+        in <= 4'b0010;
         #10
-        in <= 6'b000011;
+        in <= 4'b0011;
         #10
-        in <= 6'b010111;
+        in <= 4'b0111;
         #10
-        in <= 6'b100111;
+        in <= 4'b1011;
         #10
-        in <= 6'b111111;
+        in <= 4'b1111;
         #10
-        in <= 6'b000011;
+        in <= 4'b0011;
+        #10
+        in <= 4'b1111;
         #20
         $finish;
     end
 
-    
+    initial begin
+        $dumpfile("worm.vcd");
+        $dumpvars(0,worm_top);
+    end
+
 
 endmodule
