@@ -40,8 +40,8 @@ module worm(in,clk,out1,out2);
         end
         else if(dir == 2'd2)begin
             temp = state[0]-size;
-            if(temp >5'd0)begin
-                state[0] <= state[0]-size;
+            if(temp <5'd15)begin
+                state[0] <= temp;
             end
             else begin
                 state[0] <= 5'd0;
@@ -49,8 +49,8 @@ module worm(in,clk,out1,out2);
         end 
         else begin
             temp = state[1] - size;
-            if(temp >5'd0)begin
-                state[1] <= state[0] -size;
+            if(temp <5'd15)begin
+                state[1] <= temp;
             end
             else begin
                 state[1] <= 5'd0;
