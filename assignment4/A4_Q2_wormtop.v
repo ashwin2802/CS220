@@ -34,6 +34,8 @@ module worm_top;
         in <= 6'b100111;
         #10
         in <= 6'b111111;
+        #10
+        in <= 6'b000011;
         #20
         $finish;
     end
