@@ -1,18 +1,20 @@
-`include "A4_Q2_worm.v"
+`include "A4Q2_worm.v"
 
 module worm_top;
-    reg clk;
-    reg[3:0] in;
-    wire[4:0] out1;
-    wire[4:0] out2;
-    reg in_valid;
 
-    worm a(in,clk,out1,out2);
+    reg[3:0] in;
+    reg clk;
+
+    wire[4:0] out1, out2;
+
+    worm BOARD (in, clk, out1, out2);       // instatiate hardware
 
     always @(out1 or out2) begin
-        $display("t = %d: Input - %b, Location = (%d,%d)", $time,in, out1,out2);
+        // Display last input and resulting state at the end of each clock period
+        $display("t = %d: Input - %b, Location = (%d,%d)", $time, in, out1, out2);
     end
 
+    // Clock with 10 time units period
     initial begin
         forever begin
             #5
@@ -20,14 +22,17 @@ module worm_top;
         end
     end
 
+    // Simulation for 10 clock cycles
     initial begin
         clk <= 1'b0;
         #100
         $finish;
     end  
 
+    // Direction encoding: 00 - N, 01 - E, 10 - S, 11 - W
+    // Test Run
     initial begin
-        #3
+        #3              // 2 units before the rising edge
         in <= 4'b0011;  // 3 steps N
         #10
         in <= 4'b0110;  // 2 steps E
