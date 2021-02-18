@@ -1,7 +1,8 @@
 `include "A4Q2_five_bit_adder.v"
 
-module worm(in,clk,out1,out2);
+module worm(in,clk,out1,out2,in_valid);
 
+    input in_valid;
     input [3:0] in;
     input clk;
 
@@ -28,14 +29,14 @@ module worm(in,clk,out1,out2);
 
     // 00 - N, 01 - E, 10 - S, 11 - W
 
-    always @(posedge clk) begin
+    always @(posedge clk & in_valid) begin
         // direction <= {in[3], in[2]};
         A <= state[in[2]];
         B <= {in[1], in[0]};
         opcode <= in[3];
     
         // #1
-        if(buff[4] == 1'b1) begin
+/*         if(buff[4] == 1'b1) begin
             state[in[2]] <= {1'b0, {4{~in[3]}}};
         end
         else begin
@@ -43,7 +44,18 @@ module worm(in,clk,out1,out2);
         end
 
         #1
-        $display("t = %d: in:%b State:{%d, %d}, buff=%b, A = %b, B = %b\n", $time, in, state[0], state[1], buff, A, B);
+        $display("t = %d: in:%b State:{%d, %d}, buff=%b, A = %b, B = %b\n", $time, in, state[0], state[1], buff, A, B); */
+    end
+
+    always @(negedge clk & in_valid)begin
+        if(buff[4] == 1'b1) begin
+            state[in[2]] <= {1'b0, {4{~in[3]}}};
+        end
+        else begin
+            state[in[2]] <= buff;
+        end
+
+        //$display("t = %d: in:%b State:{%d, %d}, buff=%b, A = %b, B = %b\n", $time, in, state[0], state[1], buff, A, B);
     end
 
     //  always @(posedge clk ) begin

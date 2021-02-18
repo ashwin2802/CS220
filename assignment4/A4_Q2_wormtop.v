@@ -5,8 +5,9 @@ module worm_top;
     reg[3:0] in;
     wire[4:0] out1;
     wire[4:0] out2;
+    reg in_valid;
 
-    worm a(in,clk,out1,out2);
+    worm a(in,clk,out1,out2,in_valid);
 
     always @(negedge clk) begin
         $display("t = %d: Co-ordinates = (%d,%d)", $time, out1,out2);
@@ -19,7 +20,10 @@ module worm_top;
     end
 
     initial begin
-        clk <= 1'b0;
+        clk <= 1'b1;
+        in_valid=1;
+        #10
+        in_valid=1;
         #200
         $finish;
     end  
