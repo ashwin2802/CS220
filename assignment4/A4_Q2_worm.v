@@ -1,6 +1,6 @@
 `include "A4Q2_five_bit_adder.v"
 
-module worm(in,clk,out1,out2,in_valid);
+module worm(in,clk,out1,out2);
 
     input in_valid;
     input [3:0] in;
@@ -29,7 +29,7 @@ module worm(in,clk,out1,out2,in_valid);
 
     // 00 - N, 01 - E, 10 - S, 11 - W
 
-    always @(posedge clk & in_valid) begin
+    always @(posedge clk) begin
         // direction <= {in[3], in[2]};
         A <= state[in[2]];
         B <= {in[1], in[0]};
@@ -47,7 +47,7 @@ module worm(in,clk,out1,out2,in_valid);
         $display("t = %d: in:%b State:{%d, %d}, buff=%b, A = %b, B = %b\n", $time, in, state[0], state[1], buff, A, B); */
     end
 
-    always @(negedge clk & in_valid)begin
+    always @(negedge clk) begin
         if(buff[4] == 1'b1) begin
             state[in[2]] <= {1'b0, {4{~in[3]}}};
         end
@@ -109,6 +109,11 @@ module worm(in,clk,out1,out2,in_valid);
      assign out1 = state[0];
      assign out2 = state[1];
 
-
+     initial begin
+         $dumpfile("worm.vcd");
+         $dumpvars(0, worm);
+         $dumpvars(0, state[0][4:0]);
+         $dumpvars(0, state[1][4:0]);
+     end
 
 endmodule
