@@ -2,6 +2,7 @@
 
 module worm(in,clk,out1,out2);
 
+    input in_valid;
     input [3:0] in;
     input clk;
 
@@ -35,7 +36,7 @@ module worm(in,clk,out1,out2);
         opcode <= in[3];
     
         // #1
-        if(buff[4] == 1'b1) begin
+/*         if(buff[4] == 1'b1) begin
             state[in[2]] <= {1'b0, {4{~in[3]}}};
         end
         else begin
@@ -43,7 +44,18 @@ module worm(in,clk,out1,out2);
         end
 
         #1
-        $display("t = %d: in:%b State:{%d, %d}, buff=%b, A = %b, B = %b\n", $time, in, state[0], state[1], buff, A, B);
+        $display("t = %d: in:%b State:{%d, %d}, buff=%b, A = %b, B = %b\n", $time, in, state[0], state[1], buff, A, B); */
+    end
+
+    always @(negedge clk) begin
+        if(buff[4] == 1'b1) begin
+            state[in[2]] <= {1'b0, {4{~in[3]}}};
+        end
+        else begin
+            state[in[2]] <= buff;
+        end
+
+        //$display("t = %d: in:%b State:{%d, %d}, buff=%b, A = %b, B = %b\n", $time, in, state[0], state[1], buff, A, B);
     end
 
     //  always @(posedge clk ) begin
@@ -97,6 +109,11 @@ module worm(in,clk,out1,out2);
      assign out1 = state[0];
      assign out2 = state[1];
 
-
+     initial begin
+         $dumpfile("worm.vcd");
+         $dumpvars(0, worm);
+         $dumpvars(0, state[0][4:0]);
+         $dumpvars(0, state[1][4:0]);
+     end
 
 endmodule
