@@ -7,11 +7,11 @@ module worm_top;
 
     wire[4:0] out1, out2;
 
-    worm BOARD (in, clk, out1, out2);       // instatiate hardware
+    worm BOARD (in, clk, out1, out2);       // instantiate hardware
 
     always @(out1 or out2) begin
         // Display last input and resulting state at the end of each clock period
-        $display("t = %d: Input - %b, Location = (%d,%d)", $time, in, out1, out2);
+        $display("t = %d: Current Location = (%d,%d); Next Input - %b", $time, out1, out2, in);
     end
 
     // Clock with 10 time units period
@@ -39,7 +39,7 @@ module worm_top;
         #10
         in <= 4'b1111;  // 3 steps W
         #10
-        in <= 4'b1000;  // 0 steps S
+        in <= 4'b1010;  // 2 steps S
         #10
         in <= 4'b0101;  // 1 steps E
         #10
