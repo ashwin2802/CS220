@@ -6,41 +6,48 @@ module least_top;
 
     least_index UUT (A, B, C, D, index); // instantiate module
 
-    // always @(A or B or C or D or index) begin
-    //     $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-    // end
-
+    // Testcases
     initial begin
-        A <= 3'b110; B <= 3'b010; C <= 3'b001; D <= 3'b111;
+        A <= 3'b110; B <= 3'b010; C <= 3'b001; D <= 3'b111;     // Answer = 2
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b110; B <= 3'b010; C <= 3'b010; D <= 3'b111;
+        
+        A <= 3'b110; B <= 3'b010; C <= 3'b010; D <= 3'b111;     // Answer = 2
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b100; B <= 3'b110; C <= 3'b101; D <= 3'b111;
+        
+        A <= 3'b100; B <= 3'b110; C <= 3'b101; D <= 3'b111;     // Answer = 0
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b101; B <= 3'b011; C <= 3'b111; D <= 3'b101;
+        
+        A <= 3'b101; B <= 3'b011; C <= 3'b111; D <= 3'b101;     // Answer = 1
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b111; B <= 3'b101; C <= 3'b111; D <= 3'b101;
+        
+        A <= 3'b111; B <= 3'b101; C <= 3'b111; D <= 3'b101;     // Answer = 3
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b111; B <= 3'b111; C <= 3'b111; D <= 3'b101;
+        
+        A <= 3'b111; B <= 3'b111; C <= 3'b111; D <= 3'b101;     // Answer = 3
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b000; B <= 3'b000; C <= 3'b000; D <= 3'b000;
+        
+        A <= 3'b000; B <= 3'b000; C <= 3'b000; D <= 3'b000;     // Answer = 3
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b101; B <= 3'b101; C <= 3'b011; D <= 3'b100;
+        
+        A <= 3'b101; B <= 3'b101; C <= 3'b011; D <= 3'b100;     // Answer = 2
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b010; B <= 3'b001; C <= 3'b101; D <= 3'b110;
+        
+        A <= 3'b010; B <= 3'b001; C <= 3'b101; D <= 3'b110;     // Answer = 1
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
-        A <= 3'b111; B <= 3'b000; C <= 3'b011; D <= 3'b101;
+        
+        A <= 3'b111; B <= 3'b000; C <= 3'b011; D <= 3'b101;     // Answer = 1
         #1
         $display("t = %d: A = %b(%d), B = %b(%d), C = %b(%d), D = %b(%d) - index = %b(%d)", $time, A, A, B, B, C, C, D, D, index, index);
+        
         $finish;
     end
 
