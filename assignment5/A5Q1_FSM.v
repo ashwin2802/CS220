@@ -14,8 +14,8 @@ module FSM(clk,in,state);
         state <= 4'd0;  // Starting state
     end
 
-    Microcode_ROM FSM_MR(state, clk, branch_control);
-    next_state state_update(state, clk, branch_control, next, in);
+    Microcode_ROM FSM_MR(state, clk, branch_control);       // ROM Module 
+    next_state state_update(state, clk, branch_control, next, in);      // Next State Function
 
     always @(next) begin
         state <= next;      // Fetch next state from next state function output as soon as it updates

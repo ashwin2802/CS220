@@ -38,8 +38,6 @@ module fsm_top;
         in <= 2'b00;    // Next State = 10
         #10
         in <= 2'b11;    // Next State = 12
-        #10
-        in <= 2'b01;    // Next state = 0 at t = 105
     end
 
     // Simulate for 10 clock cycles
