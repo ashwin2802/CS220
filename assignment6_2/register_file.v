@@ -50,6 +50,7 @@ module register_file(read_address1,read_address2,write_address,read_enable1,read
             if (counter==2) begin
                 if (read_enable1)begin
                     read_out1 <= registers[read_address1];
+                    
                 end
                 if (read_enable2) begin
                     read_out2 <= registers[read_address2];
