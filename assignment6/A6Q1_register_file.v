@@ -1,12 +1,14 @@
-module register_file(read_address1,read_address2,write_address,read_enable1,read_enable2,write_enable,clk,write_in,read_out1,read_out2);
+module register_file(read_address1, read_address2, write_address, read_enable1, read_enable2, write_enable, clk, write_in, read_out1, read_out2);
     input [4:0] read_address1,read_address2,write_address;
     input [15:0] write_in;
-    input read_enable1,read_enable2,write_enable,clk;
+    input read_enable1, read_enable2, write_enable, clk;
+
     output reg [15:0] read_out1;
     output reg [15:0] read_out2;
 
     reg[15:0] registers[31:0];
     reg counter; 
+
     initial begin
         //intializing the registers and counter
         registers[0] <= 16'd0; registers[1] <= 16'd0; registers[2] <= 16'd0; registers[3] <= 16'd0;
@@ -40,6 +42,7 @@ module register_file(read_address1,read_address2,write_address,read_enable1,read
         end
     end
 
+    // gtkwave debugging for register storage
     /* initial begin
         $dumpfile("proc.vcd");
         $dumpvars(0, registers[0]);

@@ -12,17 +12,17 @@ module processor_top;
 
     initial begin
         clk <= 1'b0;   
-        pc <= 4'd0;             //Program COunter
-        instr_en <= 1'b0;       //Need to tell an instruction is ongoing or not
+        pc <= 4'd0;             // Program COunter
+        instr_en <= 1'b0;       // Need to tell an instruction is ongoing or not
 
 
-        //Loading instructions
-        //First 3 bits are for opcode
-        //Next 5 bits are for read_address1 and it this always used in default if only one read is done in an instruction
-        //Next 5 bits are for read_address2
-        //Next 5 bits are for write_address
-        //Next 16 bits are for constants
-        //If a field is unused then they are zerod out
+        // Loading instructions
+        // First 3 bits are for opcode
+        // Next 5 bits are for read_address1 and it this always used in default if only one read is done in an instruction
+        // Next 5 bits are for read_address2
+        // Next 5 bits are for write_address
+        // Next 16 bits are for constants
+        // If a field is unused then they are zerod out
         instr_mem[0] <= {3'b000, 5'd0, 5'd0, 5'd1, 16'd17};
         instr_mem[1] <= {3'b011, 5'd1, 5'd0, 5'd2, -16'd9};
         instr_mem[2] <= {3'b100, 5'd1, 5'd2, 5'd3, 16'd65};
@@ -46,7 +46,7 @@ module processor_top;
 
     processor PROC(instr, clk, instr_en, done, data_out1, data_out2, data_out3);
 
-    always @(posedge done) begin
+    always @(posedge done) begin    // Display outputs as soon as processor sets done flag
         // if(instr[33:31] == 3'b000) begin
         //     $display("t = %d: (Op: %b) complete", $time, instr[33:31]);
         // end
@@ -92,6 +92,8 @@ module processor_top;
             end
         end
     end
+
+    // gtkwave debugging
 /* 
     initial begin
         $dumpfile("proc.vcd");
