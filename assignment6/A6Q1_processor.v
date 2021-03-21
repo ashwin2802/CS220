@@ -1,16 +1,20 @@
 `include "A6Q1_decoder.v"
 `include "A6Q1_register_file.v"
  
- module processor(instruct, clk, instruct_sig, output_sig, out1, out2, alu_res);
+module processor(instruct, clk, instruct_sig, output_sig, out1, out2, alu_res);
     input[33:0] instruct;
     input clk, instruct_sig;
+
+    output wire [15:0] out1, out2;
+    output reg [15:0] alu_res;
+    output reg output_sig;
     
     wire[4:0] read_address1, read_address2, write_address;
     wire[15:0] read_out1, read_out2;
     wire[2:0] opcode;
 
-    reg read_enable1, read_enable2, write_enable;
-    reg en;
+    reg read_enable1, read_enable2, write_enable, en;
+    reg [15:0] write_in;
 
     decoder decode_unit(instruct, clk, read_address1, read_address2, write_address, opcode);
     register_file reg_file(read_address1, read_address2, write_address, read_enable1, read_enable2, write_enable, clk, write_in, read_out1, read_out2); 
