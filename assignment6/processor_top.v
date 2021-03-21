@@ -38,35 +38,37 @@ module processor_top;
 
     processor PROC(instr, clk, instr_en, done, data_out1, data_out2, data_out3);
 
-    always @(posedge done) begin
-        // if(instr[33:31] == 3'b000) begin
-        //     $display("t = %d: (Op: %b) complete", $time, instr[33:31]);
-        // end
-        if(instr[33:31] == 3'b001) begin
-            $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out1, data_out1, instr[30:26]);
-        end
-        else if(instr[33:31] == 3'b010) begin
-            $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out1, data_out1, instr[30:26]);
-            $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out2, data_out2, instr[25:21]);
-        end
-        else if(instr[33:31] == 3'b011) begin
-            $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out1, data_out1, instr[30:26]);
-        end
-        else if(instr[33:31] == 3'b100) begin
-            $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out1, data_out1, instr[30:26]);
-            $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out2, data_out2, instr[25:21]);
-        end
-        else if(instr[33:31] == 3'b101) begin
-            $display("t = %d: (Op: %b) - Wrote %b (%d) to %h", $time, instr[33:31], data_out3, data_out3, instr[20:16]);
-        end
-        else if(instr[33:31] == 3'b110) begin
-            $display("t = %d: (Op: %b) - Wrote %b (%d) to %h", $time, instr[33:31], data_out3, data_out3, instr[20:16]);
-        end
-        else if(instr[33:31] == 3'b111) begin
-            $display("t = %d: (Op: %b) - Wrote %b (%d) to %h", $time, instr[33:31], data_out3, data_out3, instr[20:16]);
-        end
+    always @(negedge clk) begin
+        if(done) begin
+            if(instr[33:31] == 3'b000) begin
+                $display("t = %d: (Op: %b) complete", $time, instr[33:31]);
+            end
+            if(instr[33:31] == 3'b001) begin
+                $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out1, data_out1, instr[30:26]);
+            end
+            else if(instr[33:31] == 3'b010) begin
+                $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out1, data_out1, instr[30:26]);
+                $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out2, data_out2, instr[25:21]);
+            end
+            else if(instr[33:31] == 3'b011) begin
+                $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out1, data_out1, instr[30:26]);
+            end
+            else if(instr[33:31] == 3'b100) begin
+                $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out1, data_out1, instr[30:26]);
+                $display("t = %d: (Op: %b) - Read %b (%d) from %h", $time, instr[33:31], data_out2, data_out2, instr[25:21]);
+            end
+            else if(instr[33:31] == 3'b101) begin
+                $display("t = %d: (Op: %b) - Wrote %b (%d) to %h", $time, instr[33:31], data_out3, data_out3, instr[20:16]);
+            end
+            else if(instr[33:31] == 3'b110) begin
+                $display("t = %d: (Op: %b) - Wrote %b (%d) to %h", $time, instr[33:31], data_out3, data_out3, instr[20:16]);
+            end
+            else if(instr[33:31] == 3'b111) begin
+                $display("t = %d: (Op: %b) - Wrote %b (%d) to %h", $time, instr[33:31], data_out3, data_out3, instr[20:16]);
+            end
 
-        instr_en <= 1'b0;
+            instr_en <= 1'b0;
+        end        
     end
 
     always @(posedge clk) begin
@@ -83,13 +85,14 @@ module processor_top;
     end
 
     initial begin
-        #1200
-        $finish;
+        $dumpfile("proc.vcd");
+        $dumpvars(0, processor_top);
     end
 
     initial begin
-        $dumpfile("proc.vcd");
-        $dumpvars(0, processor_top);
+        if(pc == `NUM_INSTR) begin
+            $finish;
+        end
     end
 
 endmodule

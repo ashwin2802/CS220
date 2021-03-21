@@ -8,8 +8,7 @@
     wire[4:0] read_address1;
     wire[4:0] read_address2;
     wire[4:0] write_address;
-    wire[15:0] write_data;
-    reg[15:0] write_in;
+    output reg[15:0] write_in;
     wire[15:0] read_out1;
     wire[15:0] read_out2;
     output wire[15:0] out1, out2;
@@ -28,7 +27,7 @@
         read_enable1 <= 1'b0;
         read_enable2 <= 1'b0;
         write_enable <= 1'b0;
-        counter <= 5'b1;
+        counter <= 5'b0;
         output_sig <= 1'b0;
     end
 
@@ -44,7 +43,7 @@
                 if(counter == 5'd2)begin
                     output_sig <= 1'b1;
                     write_enable <= 1'b0;
-                    counter <= 5'd1;
+                    counter <= 5'd0;
                     en <= 1'b0;
                 end
             end
@@ -53,7 +52,7 @@
                 if(counter == 5'd2)begin
                     output_sig <= 1'b1;
                     read_enable1 <= 1'b0;
-                    counter <= 5'd1;
+                    counter <= 5'd0;
                     en <= 1'b0;
                 end
             end
@@ -64,7 +63,7 @@
                     output_sig <= 1'b1;
                     read_enable1 <= 1'b0;
                     read_enable2 <= 1'b0;
-                    counter <= 5'd1;
+                    counter <= 5'd0;
                     en <= 1'b0;
                 end
             end
@@ -75,7 +74,7 @@
                     output_sig <= 1'b1;
                     read_enable1 <= 1'b0;
                     write_enable <= 1'b0;
-                    counter <= 5'd1;
+                    counter <= 5'd0;
                     en <= 1'b0;
                 end
             end
@@ -88,7 +87,7 @@
                     read_enable1 <= 1'b0;
                     read_enable2 <= 1'b0;
                     write_enable <= 1'b0;
-                    counter <= 5'd1;
+                    counter <= 5'd0;
                 end 
             end
             else if(opcode == 3'b101) begin
@@ -108,7 +107,7 @@
                     read_enable1 <= 1'b0;
                     read_enable2 <= 1'b0;
                     write_enable <= 1'b0;
-                    counter <= 5'd1;
+                    counter <= 5'd0;
                 end
             end
             else if(opcode == 3'b110) begin
@@ -128,7 +127,7 @@
                     read_enable1 <= 1'b0;
                     read_enable2 <= 1'b0;
                     write_enable <= 1'b0;
-                    counter <= 5'd1;
+                    counter <= 5'd0;
                 end
             end
             else if(opcode == 3'b111) begin
@@ -147,14 +146,14 @@
                     read_enable1 <= 1'b0;
                     read_enable2 <= 1'b0;
                     write_enable <= 1'b0;
-                    counter <= 5'd1;
+                    counter <= 5'd0;
                 end
             end
             else begin
                 read_enable1 <= 1'b0;
                 read_enable2 <= 1'b0;
                 write_enable <= 1'b0;
-                counter <= 5'd1;
+                counter <= 5'd0;
                 output_sig <= 1'b0;
             end
         
