@@ -1,27 +1,12 @@
-module decoder(inst, rs1, rs2, rd, shift, command, imm);
-    input [33:0] inst;
-    output reg [4:0] rs1, rs2, rd;
-    output reg [3:0] shift;
-    output reg [2:0] command;
-    output reg [15:0] imm;
+module decoder(instruct,clk,read_address1,read_address2,write_address,opcode);
+    input[33:0] instruct;
+    input clk;
+    output wire[4:0] read_address1,read_address2,write_address;
+    output wire[2:0] opcode;
 
-    always @(inst) begin
-        if(inst[33:31] == 3'd0) begin
-            // R format
-            command <= inst[2:0];
-            shift <= inst[6:3];
-            rd <= inst[11:7];
-            rs2 <= inst[16:12];
-            rs1 <= inst[21:17];
-        end
-        else begin
-            // I format
-            command <= inst[33:31];
-            rs1 <= inst[30:26];
-            rs2 <= inst[25:21];
-            rd <= inst[20:16];
-            imm <= inst[15:0];
-        end
-    end
+    assign opcode = instruct[33:31];
+    assign read_address1 = instruct[30:26];
+    assign read_address2 = instruct[25:21];
+    assign write_address = instruct[20:16];
 
 endmodule

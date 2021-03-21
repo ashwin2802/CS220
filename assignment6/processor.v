@@ -1,54 +1,170 @@
-`include "add_sub.v"
-`include "shift.v"
-`include "memory.v"
 `include "decoder.v"
+`include "register_file.v"
+ 
+ module processor(instruct,clk,instruct_sig,output_sig,out1,out2,alu_res);
+    input[33:0] instruct;
+    input clk,instruct_sig;
+    output reg output_sig;
+    wire[4:0] read_address1;
+    wire[4:0] read_address2;
+    wire[4:0] write_address;
+    output reg[15:0] write_in;
+    wire[15:0] read_out1;
+    wire[15:0] read_out2;
+    output wire[15:0] out1, out2;
+    
+    wire[2:0] opcode;
+    reg read_enable1,read_enable2,write_enable;
+    reg en;
+    output reg[15:0] alu_res;
 
-module processor(inst, out1, out2, out3, out4, out_en, done, clk);
-    input [33:0] inst;
-    output reg [5:0] out1, out2;
-    output reg [15:0] out3, out4;
-    input clk;
-    output reg done;
-    output reg [3:0] out_en;
+    decoder decode_unit(instruct,clk,read_address1,read_address2,write_address,opcode);
+    register_file reg_file(read_address1,read_address2,write_address,read_enable1,read_enable2,write_enable,clk,write_in,read_out1,read_out2); 
+    
+    reg [4:0] counter;
 
-    wire [5:0] read_addr1, read_addr2, write_addr;
-    wire read_en1, read_en2, write_en, opcode, c_out, over;
-    wire [2:0] command;
-    wire [15:0] write_data, read_data1, read_data2;
-    wire [3:0] shift;
+    initial begin
+        read_enable1 <= 1'b0;
+        read_enable2 <= 1'b0;
+        write_enable <= 1'b0;
+        counter <= 5'b0;
+        output_sig <= 1'b0;
+    end
 
-    decoder DECODER(inst, read_addr1, read_addr2, write_addr, shift, command, write_data);
-
-    always @(command) begin
-        if(command == 3'b000) begin
-
+    always @(posedge clk) begin
+        write_in <= instruct[15:0];
+        if(instruct_sig == 0) begin
+            en <= 1'b1;
         end
-        if(command == 3'b001) begin
-            
-        end
-        if(command == 3'b010) begin
-            
-        end
-        if(command == 3'b011) begin
-            
-        end
-        if(command == 3'b100) begin
-            
-        end
-        if(command == 3'b101) begin
-            
-        end
-        if(command == 3'b110) begin
-            
-        end
-        if(command == 3'b111) begin
-            
+        else if(en == 1'b1) begin
+            counter <= counter+1;
+            if(opcode == 3'b000) begin
+                write_enable <= 1'b1;
+                if(counter == 5'd2)begin
+                    output_sig <= 1'b1;
+                    write_enable <= 1'b0;
+                    counter <= 5'd0;
+                    en <= 1'b0;
+                end
+            end
+            else if(opcode == 3'b001) begin
+                read_enable1 <= 1'b1;
+                if(counter == 5'd2)begin
+                    output_sig <= 1'b1;
+                    read_enable1 <= 1'b0;
+                    counter <= 5'd0;
+                    en <= 1'b0;
+                end
+            end
+            else if(opcode == 3'b010) begin
+                read_enable1 <= 1'b1;
+                read_enable2 <= 1'b1;
+                if(counter == 5'd2)begin
+                    output_sig <= 1'b1;
+                    read_enable1 <= 1'b0;
+                    read_enable2 <= 1'b0;
+                    counter <= 5'd0;
+                    en <= 1'b0;
+                end
+            end
+            else if(opcode == 3'b011) begin
+                read_enable1 <= 1'b1;
+                write_enable <= 1'b1;
+                if(counter == 5'd2)begin
+                    output_sig <= 1'b1;
+                    read_enable1 <= 1'b0;
+                    write_enable <= 1'b0;
+                    counter <= 5'd0;
+                    en <= 1'b0;
+                end
+            end
+            else if(opcode == 3'b100) begin
+                read_enable1 <= 1'b1;
+                read_enable2 <= 1'b1;
+                write_enable <= 1'b1;
+                if(counter == 5'd2)begin
+                    output_sig <= 1'b1;
+                    read_enable1 <= 1'b0;
+                    read_enable2 <= 1'b0;
+                    write_enable <= 1'b0;
+                    counter <= 5'd0;
+                end 
+            end
+            else if(opcode == 3'b101) begin
+                read_enable1 <= 1'b1;
+                read_enable2 <= 1'b1;
+                write_enable <= 1'b0;
+                if(counter == 5'd18)begin
+                    alu_res <= (read_out1 + read_out2);
+                    write_enable <= 1'b1;
+                end
+                if(counter == 5'd19) begin
+                    write_in <= alu_res;
+                    write_enable <= 1'b1;
+                end
+                if(counter == 5'd20)begin
+                    output_sig <= 1'b1;
+                    read_enable1 <= 1'b0;
+                    read_enable2 <= 1'b0;
+                    write_enable <= 1'b0;
+                    counter <= 5'd0;
+                end
+            end
+            else if(opcode == 3'b110) begin
+                read_enable1 <= 1'b1;
+                read_enable2 <= 1'b1;
+                write_enable <= 1'b0;
+                if(counter == 5'd18)begin
+                    alu_res <= (read_out1 - read_out2);
+                    write_enable <= 1'b1;
+                end
+                if(counter == 5'd19) begin
+                    write_in <= alu_res;
+                    write_enable <= 1'b1; 
+                end
+                if(counter == 5'd20)begin
+                    output_sig <= 1'b1;
+                    read_enable1 <= 1'b0;
+                    read_enable2 <= 1'b0;
+                    write_enable <= 1'b0;
+                    counter <= 5'd0;
+                end
+            end
+            else if(opcode == 3'b111) begin
+                read_enable1 <= 1'b1;
+                write_enable <= 1'b0;
+                if(counter == 5'd18) begin
+                    alu_res <= (read_out1 << write_in);
+                    write_enable <= 1'b1;
+                end
+                if(counter == 5'd19) begin
+                    write_in <= alu_res;
+                    write_enable <= 1'b1;
+                end
+                if(counter == 5'd20)begin
+                    output_sig <= 1'b1;
+                    read_enable1 <= 1'b0;
+                    read_enable2 <= 1'b0;
+                    write_enable <= 1'b0;
+                    counter <= 5'd0;
+                end
+            end
+            else begin
+                read_enable1 <= 1'b0;
+                read_enable2 <= 1'b0;
+                write_enable <= 1'b0;
+                counter <= 5'd0;
+                output_sig <= 1'b0;
+            end
+        
         end
     end
 
-    memory MEM(read_addr1, read_addr2, write_addr, write_data, read_en1, read_en2, write_en, read_data1, read_data2, clk);
-
-    add_sub ADDER(read_data1, read_data2, opcode, write_data, c_out, over);
-
-
-endmodule
+    always @(negedge clk) begin
+        output_sig <= 1'b0;
+    end
+    
+    assign out1 = read_out1;
+    assign out2 = read_out2;
+ 
+ endmodule
