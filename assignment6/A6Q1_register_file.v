@@ -4,12 +4,11 @@ module register_file(read_address1,read_address2,write_address,read_enable1,read
     input read_enable1,read_enable2,write_enable,clk;
     output reg [15:0] read_out1;
     output reg [15:0] read_out2;
-    //Reading takes 2 clock_cycles
-    //Writing takes 2 clock_cycles
 
     reg[15:0] registers[31:0];
     reg counter; 
     initial begin
+        //intializing the registers and counter
         registers[0] <= 16'd0; registers[1] <= 16'd0; registers[2] <= 16'd0; registers[3] <= 16'd0;
         registers[4] <= 16'd0; registers[5] <= 16'd0; registers[6] <= 16'd0; registers[7] <= 16'd0;
         registers[8] <= 16'd0; registers[9] <= 16'd0; registers[10] <= 16'd0; registers[11] <= 16'd0;
@@ -22,7 +21,7 @@ module register_file(read_address1,read_address2,write_address,read_enable1,read
     end
 
     always @(posedge clk ) begin
-        if(read_enable1|read_enable2|write_enable)begin
+        if(read_enable1|read_enable2|write_enable)begin    // Checking if any enable signal is on
             if (counter==1'b1) begin
                 if (read_enable1)begin
                     read_out1 <= registers[read_address1];
@@ -41,7 +40,7 @@ module register_file(read_address1,read_address2,write_address,read_enable1,read
         end
     end
 
-    initial begin
+    /* initial begin
         $dumpfile("proc.vcd");
         $dumpvars(0, registers[0]);
         $dumpvars(0, registers[1]);
@@ -50,6 +49,6 @@ module register_file(read_address1,read_address2,write_address,read_enable1,read
         $dumpvars(0, registers[4]);
         $dumpvars(0, registers[5]);
         $dumpvars(0, registers[6]);
-    end
+    end */
 
 endmodule
