@@ -79,17 +79,15 @@ module processor_top;
             if(pc < `NUM_INSTR) begin
                 pc <= pc + 1;
             end
+            else begin 
+               $finish; 
+            end
         end
     end
 
-    initial begin
-        #1200
-        $finish;
-    end
-
-    initial begin
-        $dumpfile("proc.vcd");
-        $dumpvars(0, processor_top);
-    end
+    // initial begin
+    //     $dumpfile("proc.vcd");
+    //     $dumpvars(0, processor_top);
+    // end
 
 endmodule

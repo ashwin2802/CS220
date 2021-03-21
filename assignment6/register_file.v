@@ -41,15 +41,15 @@ module register_file(read_address1,read_address2,write_address,read_enable1,read
         end
     end
 
-    initial begin
-        $dumpfile("proc.vcd");
-        $dumpvars(0, registers[0]);
-        $dumpvars(0, registers[1]);
-        $dumpvars(0, registers[2]);
-        $dumpvars(0, registers[3]);
-        $dumpvars(0, registers[4]);
-        $dumpvars(0, registers[5]);
-        $dumpvars(0, registers[6]);
-    end
+    // initial begin
+    //     $dumpfile("proc.vcd");
+    //     $dumpvars(0, registers[0]);
+    //     $dumpvars(0, registers[1]);
+    //     $dumpvars(0, registers[2]);
+    //     $dumpvars(0, registers[3]);
+    //     $dumpvars(0, registers[4]);
+    //     $dumpvars(0, registers[5]);
+    //     $dumpvars(0, registers[6]);
+    // end
 
 endmodule
