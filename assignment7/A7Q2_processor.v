@@ -1,7 +1,7 @@
 `include "A7Q2_decoder.v"
 `include "A7Q2_register_file.v"
 
-module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_sig,PC_final);
+module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_sig,PC_final,instruct_over);
     input clk,instruct_sig;
     input [31:0] instruct;
     input [2:0] PC_initial;
@@ -10,6 +10,7 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_s
     input [2:0] MAX_PC;
     input [5:0] OUTPUT_REG;
     output reg output_sig;
+    output reg instruct_over;
     
     reg read_enable1,read_enable2,write_enable;
     reg [4:0] read_address1,read_address2,write_address;
@@ -33,6 +34,7 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_s
         decode_enable <= 1'b0;
         instruct_valid <= 1'b1;
         output_sig <= 1'b0;
+        instruct_over <= 1'b0;
     end
 
 
@@ -90,12 +92,14 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_s
                         if(rd != 5'd0) begin
                             write_address <= rd;
                             write_enable <= 1'b1;
+                            output_sig <= 1'b1;
                         end
                     end
                     else if(opcode == 6'd9) begin
                         if(rt != 5'd0) begin
                             write_address <= rd;
                             write_enable <= 1'b1;
+                            output_sig <= 1'b1;
                         end
                     end
 
@@ -118,7 +122,7 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_s
                 else if(counter == 1'b1) begin
                     $display("OUTPUT REGISTER CONTENT : %d",read_out1);
                     counter <= 1'b0;
-                    output_sig <= 1'b1;
+                    instruct_over <= 1'b1;
                 end
 
             end
