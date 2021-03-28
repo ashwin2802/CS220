@@ -50,6 +50,8 @@ module register_file(clk,read_enable1,read_enable2,write_enable,read_address1,re
         end
         if(write_enable == 1'b1) begin
             registers[write_address] <= write_in;
+            //$display("%d\n", write_in);
         end
     end
+
 endmodule

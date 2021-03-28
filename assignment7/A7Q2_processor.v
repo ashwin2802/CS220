@@ -1,15 +1,14 @@
 `include "A7Q2_decoder.v"
 `include "A7Q2_register_file.v"
 
-module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_sig,PC_final,instruct_over);
+module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC_final,instruct_over);
     input clk,instruct_sig;
     input [31:0] instruct;
     input [2:0] PC_initial;
     output reg[2:0] PC_final;
-    reg[2:0] state;
+    output reg[2:0] state;
     input [2:0] MAX_PC;
     input [5:0] OUTPUT_REG;
-    output reg output_sig;
     output reg instruct_over;
     
     reg read_enable1,read_enable2,write_enable;
@@ -26,15 +25,15 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_s
     reg instruct_valid;
 
     initial begin
-        counter <= 1'd0;
+        counter <= 1'b0;
         read_enable1 <= 1'b0;
         read_enable2 <= 1'b0;
         write_enable <= 1'b0;
         state <= 3'd0;
         decode_enable <= 1'b0;
         instruct_valid <= 1'b1;
-        output_sig <= 1'b0;
         instruct_over <= 1'b0;
+        PC_final <= 3'd0;
     end
 
 
@@ -45,8 +44,10 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_s
                 read_enable1 <= 1'b0;
                 read_enable2 <= 1'b0;
                 PC_final <= PC_initial + 1;
-                state <= 3'd1;
                 instruct_valid <= 1'b1;
+                state <= 3'd1;
+
+
             end
             else if(state == 3'd1) begin
                 decode_enable <= 1'b1;
@@ -67,8 +68,6 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_s
                 state <= 3'd3;
             end
             else if(state == 3'd3) begin
-                read_enable1 <= 1'b0;
-                read_enable2 <= 1'b0;
                 if(opcode == 6'd0) begin
                     if(func == 6'd33) begin
                         write_in <= read_out1 + read_out2;
@@ -87,19 +86,21 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,output_s
                 state <= 3'd4;
             end
             else if(state == 3'd4) begin
-                if(instruct_valid == 1)begin
+                read_enable1 <= 1'b0;
+                read_enable2 <= 1'b0;
+                if(instruct_valid == 1'b1)begin
                     if(opcode == 6'd0) begin
                         if(rd != 5'd0) begin
                             write_address <= rd;
                             write_enable <= 1'b1;
-                            output_sig <= 1'b1;
+                
                         end
                     end
                     else if(opcode == 6'd9) begin
                         if(rt != 5'd0) begin
-                            write_address <= rd;
+                            write_address <= rt;
                             write_enable <= 1'b1;
-                            output_sig <= 1'b1;
+
                         end
                     end
 

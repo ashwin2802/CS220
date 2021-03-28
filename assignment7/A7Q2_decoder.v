@@ -5,7 +5,7 @@ module decoder(clk,decode_enable,instruct,opcode,rs,rt,rd,shift_amt,func,immedia
     output reg[5:0] opcode,func;
     output reg[4:0] rs,rt,rd,shift_amt;
     output reg[15:0]immediate;
-    always @(posedge clk ) begin
+    always @(negedge clk ) begin
         if(decode_enable == 1'b1)begin
             if(instruct[31:26] == 6'd0)begin
                 opcode <= instruct[31:26];
