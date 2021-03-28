@@ -1,5 +1,6 @@
 `define NUM_INSTR 8
 
+// Instruction memory module
 module memory(clk, pc, instr, en);
     input clk;
     input [3:0] pc;
@@ -8,6 +9,7 @@ module memory(clk, pc, instr, en);
 
     reg [31:0] instruct_mem [`NUM_INSTR-1:0];
 
+    // Initialize memory
     initial begin
         instruct_mem[0] <= 32'b00100000000001000011010001010110; // I format, write to $4
         instruct_mem[1] <= 32'b00100000000001011111111111111111; // I format, write to $5
@@ -19,11 +21,13 @@ module memory(clk, pc, instr, en);
         instruct_mem[7] <= 32'b00001000000100100011010001010110; // J format
     end
 
+    // Load new instruction
     always @(posedge clk) begin
         instr <= instruct_mem[pc];
         en <= 1'b1;
     end
 
+    // Deactivate output trigger
     always @(negedge clk) begin
         en <= 1'b0;
     end

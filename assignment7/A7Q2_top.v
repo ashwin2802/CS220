@@ -3,12 +3,17 @@
 module processor_top;
     reg clk,instruct_sig;
     reg [2:0] PC_initial,MAX_PC;
+    
     reg [5:0] OUTPUT_REG;
     reg [31:0] instruct;
+
     wire [2:0] state;
-    wire[2:0] PC_final; 
+    wire [2:0] PC_final; 
     wire instruct_over;
-    processor mini_processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC_final,instruct_over);
+
+    processor mini_processor(clk, instruct, instruct_sig, 
+            PC_initial, MAX_PC, OUTPUT_REG, 
+            state, PC_final, instruct_over);
 
     reg[31:0] instructions[6:0];  //Instruction memory
     reg counter;
@@ -22,8 +27,6 @@ module processor_top;
         instructions[4] <= 32'b 00000000001000100010100000100001;
         instructions[5] <= 32'b 00000000011001000011000000100001; 
         instructions[6] <= 32'b 00000000101001100010100000100011; 
-
-
     end
 
     initial begin
@@ -36,20 +39,16 @@ module processor_top;
         counter <= 1'b0;
     end
 
-    always begin
-        #5
-        clk <= ~clk;
-    end
     initial begin
-        #600
-        $finish;
+        forever begin
+            #5   
+            clk <= ~clk;
+        end
     end
 
-    
-
-    always @(negedge clk ) begin
+    always @(negedge clk) begin
         if(instruct_over == 1'b0) begin
-            if(state == 3'd0)begin
+            if(state == 3'd0) begin
                 if(counter == 1'b0)  begin    //Handling changing instructions
                     instruct_sig <= 1'b1;
                     counter <= 1'b1;
@@ -62,16 +61,19 @@ module processor_top;
                 end
             end
         end
-        else if(instruct_over == 1'b1)begin
+        else if(instruct_over == 1'b1) begin
             instruct_sig <= 1'b1;
         end
     end
 
+    initial begin
+        #600
+        $finish;
+    end
 
    /*  initial begin
         $dumpfile("A7Q2.vcd");
         $dumpvars(0, processor_top);
     end */
-
     
 endmodule

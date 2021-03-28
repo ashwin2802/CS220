@@ -30,6 +30,7 @@ module decoder_top;
             reg_counter[0], reg_counter[1], reg_counter[2], reg_counter[3],
             clk);
 
+    // Increment program counter
     always @(posedge clk) begin
         if(pc < `NUM_INSTR) begin
             pc <= pc + 1;
@@ -41,9 +42,9 @@ module decoder_top;
         end
     end
 
-    initial begin
-        $dumpfile("dec.top");
-        $dumpvars(0, decoder_top);
-    end
+    // initial begin
+    //     $dumpfile("dec.top");
+    //     $dumpvars(0, decoder_top);
+    // end
 
 endmodule

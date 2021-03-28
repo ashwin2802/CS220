@@ -1,7 +1,10 @@
 `include "A7Q2_decoder.v"
 `include "A7Q2_register_file.v"
 
-module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC_final,instruct_over);
+module processor(clk, instruct, instruct_sig, 
+    PC_initial, MAX_PC, OUTPUT_REG, 
+    state, PC_final, instruct_over);
+
     input clk,instruct_sig;
     input [31:0] instruct;
     input [2:0] PC_initial;  //Program counter of current instruction
@@ -24,10 +27,12 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC
     wire[15:0] immediate;
     wire [7:0] read_out1,read_out2;
 
-    register_file registers(clk,read_enable1,read_enable2,write_enable,read_address1,read_address2,write_address,read_out1,read_out2,write_in);
-    decoder decode(clk,decode_enable,instruct,opcode,rs,rt,rd,shift_amt,func,immediate);
+    register_file registers(clk, read_enable1, read_enable2,
+        write_enable, read_address1, read_address2,
+        write_address, read_out1, read_out2, write_in);
 
-
+    decoder decode(clk, decode_enable, instruct,
+        opcode, rs, rt, rd, shift_amt, func, immediate);
 
     initial begin
         //Intializing various blocks of the processor
@@ -42,8 +47,7 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC
         PC_final <= 3'd0;
     end
 
-
-    always @(posedge clk ) begin
+    always @(posedge clk) begin
         if (instruct_sig == 0) begin
             if(state == 3'd0) begin      //Modeling state 0 of FSM
                 write_enable <= 1'b0;
@@ -52,8 +56,6 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC
                 PC_final <= PC_initial + 1;
                 instruct_valid <= 1'b1;
                 state <= 3'd1;
-
-
             end
             else if(state == 3'd1) begin  //Modeling state 1 of FSM
                 decode_enable <= 1'b1;
@@ -81,7 +83,6 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC
                     else if(func == 6'd35) begin
                         write_in <= read_out1 - read_out2;
                     end
-
                 end
                 else if(opcode == 6'd9) begin
                     write_in <= read_out1 + immediate[7:0];
@@ -99,17 +100,14 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC
                         if(rd != 5'd0) begin
                             write_address <= rd;
                             write_enable <= 1'b1;
-                
                         end
                     end
                     else if(opcode == 6'd9) begin
                         if(rt != 5'd0) begin
                             write_address <= rt;
                             write_enable <= 1'b1;
-
                         end
                     end
-
                 end
                 if(PC_final < MAX_PC) begin
                     state <= 3'd0;
@@ -117,7 +115,6 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC
                 else begin
                     state <= 3'd5;
                 end
-
             end
 
             else if(state <= 3'd5)begin     //Modeling state 5 of FSM
@@ -127,15 +124,12 @@ module processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC
                     counter <= 1'b1;
                 end
                 else if(counter == 1'b1) begin
-                    $display("OUTPUT REGISTER CONTENT : %d",read_out1);   //Displaying the output here as state 5 is supposed to do that
+                    $display("Data in $%d : %d", OUTPUT_REG, read_out1);   //Displaying the output here as state 5 is supposed to do that
                     counter <= 1'b0;
                     instruct_over <= 1'b1;
                 end
-
             end
         end
     end
-
-  
 
 endmodule
