@@ -7,6 +7,7 @@ module register_file(clk,read_enable1,read_enable2,write_enable,read_address1,re
 
     reg[7:0] registers[31:0];
     initial begin
+        // Initialising 32 registers each of width 8 bits
         registers[0] = 8'd0;
         registers[1] = 8'd0;
         registers[2] = 8'd0;
@@ -42,15 +43,14 @@ module register_file(clk,read_enable1,read_enable2,write_enable,read_address1,re
     end
 
     always @(negedge clk ) begin
-        if(read_enable1 == 1'b1) begin
+        if(read_enable1 == 1'b1) begin              //Reading from read_port-1
             read_out1 <= registers[read_address1];
         end
-        if(read_enable2 == 1'b1) begin
+        if(read_enable2 == 1'b1) begin              //Reading from read_port-2
             read_out2 <= registers[read_address2];
         end
-        if(write_enable == 1'b1) begin
+        if(write_enable == 1'b1) begin              //Writing from write_port-1
             registers[write_address] <= write_in;
-            //$display("%d\n", write_in);
         end
     end
 

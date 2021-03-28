@@ -10,11 +10,11 @@ module processor_top;
     wire instruct_over;
     processor mini_processor(clk,instruct,instruct_sig,PC_initial,MAX_PC,OUTPUT_REG,state,PC_final,instruct_over);
 
-    reg[31:0] instructions[6:0];
+    reg[31:0] instructions[6:0];  //Instruction memory
     reg counter;
 
     initial begin
-
+        //Initialising instruction memory
         instructions[0] <= 32'b 00100100000000010000000000101101;
         instructions[1] <= 32'b 00100100000000101111111111101100;
         instructions[2] <= 32'b 00100100000000111111111111000100;
@@ -27,7 +27,7 @@ module processor_top;
     end
 
     initial begin
-        instruct <= 32'b 00100100000000010000000000101101;
+        instruct <= 32'd0;
         instruct_sig <= 1'b0;
         clk <= 1'b0;
         MAX_PC <= 3'd7;
@@ -50,7 +50,7 @@ module processor_top;
     always @(negedge clk ) begin
         if(instruct_over == 1'b0) begin
             if(state == 3'd0)begin
-                if(counter == 1'b0)  begin
+                if(counter == 1'b0)  begin    //Handling changing instructions
                     instruct_sig <= 1'b1;
                     counter <= 1'b1;
                     PC_initial <= PC_final;
@@ -67,12 +67,11 @@ module processor_top;
         end
     end
 
-        // gtkwave debugging
 
-    initial begin
+   /*  initial begin
         $dumpfile("A7Q2.vcd");
         $dumpvars(0, processor_top);
-    end
+    end */
 
     
 endmodule
