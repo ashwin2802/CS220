@@ -1,4 +1,4 @@
-`include "A8Q1_size.h"
+`include "A8Q1_defs.h"
 
 // Instruction memory module
 module instruction_memory(clk, state, pc, instr);
@@ -29,8 +29,8 @@ module instruction_memory(clk, state, pc, instr);
 
      // Load new instruction
     always @(posedge clk) begin
-        if(state == 3'd0) begin
-            instr <= instruct_mem[pc];
+        if(state == `IF) begin          // Instruction Fetch state
+            instr <= instruct_mem[pc];  // Load instruction at current pc
         end
     end
 

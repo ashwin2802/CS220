@@ -1,4 +1,4 @@
-`include "A8Q1_size.h"
+`include "A8Q1_defs.h"
 `include "A8Q1_instrmem.v"
 `include "A8Q1_decoder.v"
 `include "A8Q1_regfile.v"
@@ -30,40 +30,54 @@ module processor(clk, done, out);
     wire [7:0] new_pc, res_data, data_out;
 
     initial begin
-        state <= 3'd0;
+        state <= `IF;
         done <= 1'd0;
         pc <= `START_PC;
     end
 
     instruction_memory INSTR(clk, state, pc, instr);
-    decoder DEC(clk, state, instr, format, opcode, rs, rt, rd, shift, imm, jt);
-    register_file REGFILE(clk, state, rs, rt, rd, reg_addr, write, format, valid, r_data1, r_data2, w_data, exec_done);
-    alu_unit ALU(clk, state, pc, format, opcode, r_data1, r_data2, shift, imm, jt, new_pc, data_addr, reg_addr, res_data, data_en, valid, write);
+
+    decoder DEC(clk, state, instr, 
+            format, opcode, rs, rt, rd, 
+            shift, imm, jt);
+
+    register_file REGFILE(clk, state, 
+            rs, rt, rd, reg_addr, 
+            write, format, valid, 
+            r_data1, r_data2, w_data, 
+            exec_done);
+
+    alu_unit ALU(clk, state, pc, 
+            format, opcode, r_data1, r_data2, 
+            shift, imm, jt, new_pc, 
+            data_addr, reg_addr, res_data, 
+            data_en, valid, write);
+
     data_memory DATA(clk, state, data_en, data_addr, data_out);
 
     always @(posedge clk) begin
-        if(state == 3'd5 && pc < `MAX_PC) begin
-            state <= 3'd0;
+        if(state == `WB && pc < `MAX_PC) begin      // instructions are still left
+            state <= 3'd0;                          // fetch new instruction
         end
-        else if(state != 3'd6) begin
-            state <= state + 3'd1;
+        else if(state != `OUT) begin                // processing an instruction
+            state <= state + 3'd1;                  // go to next stage
         end
-        else begin
-            out <= r_data1;
-            done <= exec_done;
+        else begin                                  // output stage
+            out <= r_data1;                         // fetch output
+            done <= exec_done;                      // mark as done
         end
     end
 
     always @(negedge clk) begin
-        if(state == 3'd4) begin
-            pc <= new_pc;
+        if(state == `MEM) begin
+            pc <= new_pc;                       // update program counter after ALU processing
         end
-        if(state == 3'd5) begin
+        if(state == `WB) begin
             if(data_en == 1'b1) begin
-                w_data <= data_out;
+                w_data <= data_out;             // WB for data fetch
             end
             else begin
-                w_data <= res_data;
+                w_data <= res_data;             // WB for ALU result
             end
         end
     end

@@ -1,10 +1,12 @@
-`include "A8Q1_size.h"
+`include "A8Q1_defs.h"
 `include "A8Q1_processor.v"
 
 module processor_top;
     reg clk;
     wire done;
     wire [7:0] data;
+
+    // NOTE: Data Memory is initialized in A8Q1_datamem.v
 
     processor PROC(clk, done, data);
 
@@ -19,14 +21,14 @@ module processor_top;
         end
     end
 
-    always @(posedge done) begin
+    always @(posedge done) begin        // Display final output
        $display("Time = %d: Result in $%d: %b (%d)", $time, `OUTPUT_REG, data, data);
        $finish; 
     end
 
-    initial begin
-        $dumpfile("proc.vcd");
-        $dumpvars(0, processor_top);
-    end
+    // initial begin
+    //     $dumpfile("proc.vcd");
+    //     $dumpvars(0, processor_top);
+    // end
 
 endmodule

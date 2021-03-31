@@ -1,7 +1,8 @@
-`include "A8Q1_size.h"
+`include "A8Q1_defs.h"
 
 module register_file(clk, state, read_address1, read_address2,
-    write_address1, write_address2, write, format, valid, read_out1, read_out2, write_in, done);
+    write_address1, write_address2, write, format, valid, 
+    read_out1, read_out2, write_in, done);
     
     input [7:0] write_in;
     input [4:0] read_address1, read_address2;
@@ -30,38 +31,38 @@ module register_file(clk, state, read_address1, read_address2,
     end
 
     always @(posedge clk) begin
-        if(state == 3'd2) begin
+        if(state == `RF) begin                       // Fetch source operands from registers
             read_out1 <= registers[read_address1];
             read_out2 <= registers[read_address2];
         end
-        else if(state == 3'd5) begin              
-            if(write == 1'b1 && valid == 1'b1) begin
-                if(format == 2'd1 && write_address2 != 5'd0) begin 
-                    registers[write_address2] <= write_in;
+        else if(state == `WB) begin                 // Write results to registers
+            if(write == 1'b1 && valid == 1'b1) begin        // Write is required, instruction is valid
+                if(format == `J && write_address2 != 5'd0) begin 
+                    registers[write_address2] <= write_in;    // Write to register address computed by ALU - for jump targets
                 end
                 else if(write_address1 != 5'd0) begin
-                    registers[write_address1] <= write_in;
+                    registers[write_address1] <= write_in;    // Write to instruction destination register
                 end
             end
         end
-        else if(state == 3'd6) begin
+        else if(state == `OUT) begin                // Fetch output and mark done
             read_out1 <= registers[`OUTPUT_REG];
             done <= 1'b1;
         end
     end
 
     // gtkwave debugging for register storage
-    initial begin
-        $dumpfile("proc.vcd");
-        $dumpvars(0, registers[0]);
-        $dumpvars(0, registers[1]);
-        $dumpvars(0, registers[2]);
-        $dumpvars(0, registers[3]);
-        $dumpvars(0, registers[4]);
-        $dumpvars(0, registers[5]);
-        $dumpvars(0, registers[6]);
-        $dumpvars(0, registers[31]);
-    end
+    // initial begin
+    //     $dumpfile("proc.vcd");
+    //     $dumpvars(0, registers[0]);
+    //     $dumpvars(0, registers[1]);
+    //     $dumpvars(0, registers[2]);
+    //     $dumpvars(0, registers[3]);
+    //     $dumpvars(0, registers[4]);
+    //     $dumpvars(0, registers[5]);
+    //     $dumpvars(0, registers[6]);
+    //     $dumpvars(0, registers[31]);
+    // end
 
 
 endmodule

@@ -1,11 +1,16 @@
-module data_memory(clk, state, data_en, row_num, row_data);
+`include "A8Q1_defs.h"
+
+module data_memory(clk, state, data_en, 
+    row_num, row_data);
+
     input clk, data_en;
     input [2:0] state;
     input [3:0] row_num;
     output reg [7:0] row_data;
 
-    reg [7:0] data [10:0];
+    reg [7:0] data [`DATA_SIZE-1:0];
 
+    // Initialize data memory here
     initial begin
         data[0] <= 8'b11111010; // -6
         data[1] <= 8'b00000010; //  2
@@ -21,8 +26,8 @@ module data_memory(clk, state, data_en, row_num, row_data);
     end
 
     always @(posedge clk) begin
-        if(state == 3'd4 && data_en == 1'b1) begin
-            row_data <= data[row_num];
+        if(state == `MEM && data_en == 1'b1) begin      // Correct state and data fetch is required
+            row_data <= data[row_num];                  // Fetch data from datamem
         end
     end
 
