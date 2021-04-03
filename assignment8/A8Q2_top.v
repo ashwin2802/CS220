@@ -6,7 +6,7 @@ module processor_top;
     wire done;
     wire [7:0] data;
 
-    // NOTE: Data Memory is initialized in A8Q1_datamem.v
+    // NOTE: Data Memory is initialized in A8Q2_datamem.v
 
     processor PROC(clk, done, data);
 
@@ -22,7 +22,7 @@ module processor_top;
     end
 
     always @(posedge done) begin        // Display final output
-       $display("Time = %d: Result in $%d: %b (%d)", $time, `OUTPUT_REG, data, data);
+       $display("Time = %d: Result in $%d: %b", $time, `OUTPUT_REG, data); // Answer displayed in  2's complement
        $finish; 
     end
 

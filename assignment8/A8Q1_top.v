@@ -22,7 +22,7 @@ module processor_top;
     end
 
     always @(posedge done) begin        // Display final output
-       $display("Time = %d: Result in $%d: %b (%d)", $time, `OUTPUT_REG, data, data);
+       $display("Time = %d: Result in $%d: %b", $time, `OUTPUT_REG, data); // Answer displayed in 2's complement
        $finish; 
     end
 
