@@ -42,8 +42,8 @@ computation_initialization :
     mul.s $f12,$f1,$f2
     addi $t2,$t2,-8
     addi $t3,$t3,-8
-    addi $t1,$t1,1
-    bge $t1,$t0,output
+    addi $t1,$t1,1 
+    bge $t1,$t0,output                  # Handles N=1 case
 
 computation :
     lwc1 $f1,0($t2)
@@ -51,7 +51,7 @@ computation :
     mul.s $f2,$f1,$f2
     add.s $f12,$f12,$f2
     addi $t2,$t2,-4
-    addi $t2,$t2,-4
+    addi $t3,$t3,-4
     addi $t1,$t1,1
     blt $t1,$t0,computation
 
