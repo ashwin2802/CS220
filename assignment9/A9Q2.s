@@ -18,7 +18,7 @@ main :
     slt $t4,$t1,$t0
     beq $t4,$0 end1
 
-initializing_A :
+initializing_A :            # Insert entire vector A
     li $v0,6
     syscall 
     swc1 $f0,0($t2)         # Storing element in A[i]
@@ -27,7 +27,7 @@ initializing_A :
     blt $t1,$t0,initializing_A
     xor $t1,$t1,$t1         # resetting i=0
 
-initializing_B :
+initializing_B :            # Insert entire vector B
     li $v0,6
     syscall 
     swc1 $f0,0($t3)         # Storing elements in B[i]
@@ -42,8 +42,8 @@ computation_initialization :
     mul.s $f12,$f1,$f2
     addi $t2,$t2,-8
     addi $t3,$t3,-8
-    addi $t1,$t1,1 
-    bge $t1,$t0,output                  # Handles N=1 case
+    addi $t1,$t1,1          # i = i+1   
+    bge $t1,$t0,output      # Handles N=1 case
 
 computation :
     lwc1 $f1,0($t2)
@@ -52,11 +52,10 @@ computation :
     add.s $f12,$f12,$f2
     addi $t2,$t2,-4
     addi $t3,$t3,-4
-    addi $t1,$t1,1
+    addi $t1,$t1,1          #i = i+1
     blt $t1,$t0,computation
 
-output :
-    la $a0,msg
+output :                    # To handle cases where N >0
     li $v0,4
     syscall
     li $v0,2
