@@ -32,7 +32,7 @@ initB:      li $v0, 6                   # syscall 6 (read_float)
 
 initComp:   lwc1 $f1, -4($t2)           # load A[n-1]
             lwc1 $f2, -4($t3)           # load B[n-1]
-            mul.s $f12, $f1, $f1       # store A[n-1]*B[n-1]
+            mul.s $f12, $f1, $f2       # store A[n-1]*B[n-1]
             addi $t2, $t2, -8           # set to A[n-2] address
             addi $t3, $t3, -8           # set to B[n-2] address
             addi $t1, $t1, 1            # 1 element processed, i = i +
@@ -40,7 +40,7 @@ initComp:   lwc1 $f1, -4($t2)           # load A[n-1]
 
 comp:       lwc1 $f1, 0($t2)            # Fetch A[x]
             lwc1 $f2, 0($t3)            # Fetch B[x]
-            mul.s $f2, $f1, $f1        # A[x]*B[x]
+            mul.s $f2, $f1, $f2        # A[x]*B[x]
             add.s $f12, $f12, $f2       # Add to sum in f12
             addi $t2, $t2, -4           # move to next element in A
             addi $t3, $t3, -4           # move to next element in B
