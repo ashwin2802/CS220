@@ -49,7 +49,7 @@ computation :
     lwc1 $f1,0($t2)
     lwc1 $f2,0($t3)
     mul.s $f2,$f1,$f2
-    add.s $f12,$f12,$f1
+    add.s $f12,$f12,$f2
     addi $t2,$t2,-4
     addi $t2,$t2,-4
     addi $t1,$t1,1
