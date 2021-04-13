@@ -2,13 +2,45 @@
             .globl find
             .globl main
 
-find:       
+find:       beq $a1,$a2,base        # Checking if (start==end) the base case
+            addi $sp,$sp,-4
+            lw $ra,0($sp)           # Storing $ra on the stack
+            add $t0,$a1,$a2
+            srl $t0,$t0,1           # Computing mid = (start+end)/2 
+            sll $t1,$t0,2
+            add $t2,$a0,$t1         # Computing A[mid]
+            bgt $t2,$a3,case1       # Case A[mid] > k
+            beq $t2,$a3,case2       # Case A[mid] = k
+            addi $a2,$t2,-1         # Setting end = mid-1
+            jal find
+            lw $ra,0($sp)
+            addi $sp,$sp,4
+            j func_exit
+
+case1:      addi $a1,$t0,1          # Setting start = mid +1
+            jal find
+            lw $ra,0($sp)
+            addi $sp,$sp,4
+            j func_exit       
+
+case2:      add $v0,$0,$t2          # Returing mid
+            j func_exit
+
+base:       sll $t1,$a1,2           # Computing 4*start
+            add $t2,$a0,$t1
+            lw $t3, 0($t2)          # Computing A[start]
+            beq $t3,$a3,hit
+            addi $v0,$0,-1          # Key not found and returning -1
+            j func_exit
+
+hit:       add $v0,$0,$a1          # returning start
+func_exit:  jr $ra
 
 main:       li $v0, 5               # syscall 5 (read_int)
             syscall                 
             add $t0, $0, $v0        # store n
             xor $t1, $t1, $t1       # i = 0
-            la $t2, array           # $t2 <-- *array
+            la $t2, arrayA           # $t2 <-- *array
 
 initA:      li $v0, 5               # syscall 5 (read_int)
             syscall
@@ -29,7 +61,7 @@ initA:      li $v0, 5               # syscall 5 (read_int)
             sw $ra, 0($sp)          # store return address
             jal find                # call binary search
 
-            bltz $v0, $0, absent    # function returned -1: no match found
+            bltz $v0, absent    # function returned -1: no match found
             add $a1, $v0, $0        # store result in $a1
             li $v0, 4               # syscall 4 (print_string)
             la $a0, pass            # Print pass message
