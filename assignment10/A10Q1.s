@@ -2,40 +2,40 @@
             .globl find
             .globl main
 
-find:       beq $a1,$a2,base        # Checking if (start==end) the base case
-            addi $sp,$sp,-4
-            sw $ra,0($sp)           # Storing $ra on the stack
-            add $t0,$a1,$a2
-            srl $t0,$t0,1           # Computing mid = (start+end)/2 
-            sll $t1,$t0,2
-            add $t2,$a0,$t1         # Computing A[mid]
-            lw $t2,0($t2)
-            blt $t2,$a3,case1       # Case A[mid] < k
-            beq $t2,$a3,case2       # Case A[mid] = k
-            addi $a2,$t0,-1         # Setting end = mid-1
+find:       beq $a1, $a2, base        # Checking if (start==end) the base case
+            addi $sp, $sp, -4
+            sw $ra, 0($sp)           # Storing $ra on the stack
+            add $t0, $a1, $a2
+            srl $t0, $t0, 1           # Computing mid = (start+end)/2 
+            sll $t1, $t0, 2
+            add $t2, $a0, $t1         # Computing A[mid]
+            lw $t2, 0($t2)
+            blt $t2, $a3, case1       # Case A[mid] < k
+            beq $t2, $a3, case2       # Case A[mid] = k
+            addi $a2, $t0, -1         # Setting end = mid-1
             jal find                # Case A[mid] < k
-            lw $ra,0($sp)
-            addi $sp,$sp,4
-            j func_exit
+            lw $ra, 0($sp)
+            addi $sp, $sp, 4
+            jr $ra
 
-case1:      addi $a1,$t0,1          # Setting start = mid +1
+case1:      addi $a1, $t0, 1          # Setting start = mid +1
             jal find
-            lw $ra,0($sp)
-            addi $sp,$sp,4
-            j func_exit       
+            lw $ra, 0($sp)
+            addi $sp, $sp, 4
+            jr $ra    
 
-case2:      add $v0,$0,$t0          # Returing mid
-            j func_exit
+case2:      add $v0, $0, $t0          # Returing mid
+            jr $ra
 
-base:       sll $t1,$a1,2           # Computing 4*start
-            add $t2,$a0,$t1
+base:       sll $t1, $a1, 2           # Computing 4*start
+            add $t2, $a0, $t1
             lw $t3, 0($t2)          # Computing A[start]
-            beq $t3,$a3,hit
-            addi $v0,$0,-1          # Key not found and returning -1
-            j func_exit
+            beq $t3, $a3, hit
+            addi $v0, $0, -1         # Key not found and returning -1
+            jr $ra
 
-hit:       add $v0,$0,$a1          # returning start
-func_exit:  jr $ra
+hit:        add $v0, $0, $a1          # returning start
+            jr $ra
 
 main:       li $v0, 5               # syscall 5 (read_int)
             syscall                 
