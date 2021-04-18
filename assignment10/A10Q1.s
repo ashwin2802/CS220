@@ -13,7 +13,7 @@ find:       beq $a1, $a2, base        # Checking if (start==end) the base case
             blt $t2, $a3, case1       # Case A[mid] < k
             beq $t2, $a3, case2       # Case A[mid] = k
             addi $a2, $t0, -1         # Setting end = mid-1
-            jal find                # Case A[mid] < k
+            jal find                  # Case A[mid] < k
             lw $ra, 0($sp)
             addi $sp, $sp, 4
             jr $ra
@@ -25,11 +25,12 @@ case1:      addi $a1, $t0, 1          # Setting start = mid +1
             jr $ra    
 
 case2:      add $v0, $0, $t0          # Returing mid
+            addi $sp, $sp, 4
             jr $ra
 
-base:       sll $t1, $a1, 2           # Computing 4*start
+base:       sll $t1, $a1, 2          # Computing 4*start
             add $t2, $a0, $t1
-            lw $t3, 0($t2)          # Computing A[start]
+            lw $t3, 0($t2)           # Computing A[start]
             beq $t3, $a3, hit
             addi $v0, $0, -1         # Key not found and returning -1
             jr $ra
