@@ -2,6 +2,8 @@
             .globl find
             .globl main
 
+            # Assuming inputs are given in ascending order
+
 find:       beq $a1, $a2, base        # Checking if (start==end) the base case
             addi $sp, $sp, -4
             sw $ra, 0($sp)           # Storing $ra on the stack
