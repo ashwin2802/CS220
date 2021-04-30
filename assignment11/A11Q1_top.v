@@ -46,7 +46,9 @@ module booth_top;
 
     always @(negedge clk) begin
         if(done == 1'b1) begin
-            $display("t = %d: A = %h (%d), B = %h (%d), A x B = %h (%d) - add ops = %d, sub ops = %d", $time, A, $signed(A), B, $signed(B), C, $signed(C), add, sub);
+            if(opc != 4'd0) begin
+                $display("t = %d: A = %h (%d), B = %h (%d), A x B = %h (%d) - add ops = %d, sub ops = %d", $time, A, $signed(A), B, $signed(B), C, $signed(C), add, sub);
+            end
 
             en <= 1'b1;
             A <= datamemA[opc];
