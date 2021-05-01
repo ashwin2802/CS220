@@ -1,0 +1,317 @@
+$date
+	Sun May 02 02:21:21 2021
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module div_top $end
+$var wire 1 ! status $end
+$var wire 32 " new_remainder [31:0] $end
+$var wire 32 # new_quotient [31:0] $end
+$var wire 32 $ new_divisor [31:0] $end
+$var wire 5 % new_counter [4:0] $end
+$var reg 1 & clk $end
+$var reg 5 ' dividend_size [4:0] $end
+$var reg 5 ( divider_size [4:0] $end
+$var reg 1 ) done $end
+$var reg 5 * old_counter [4:0] $end
+$var reg 32 + old_divisor [31:0] $end
+$var reg 32 , old_quotient [31:0] $end
+$var reg 32 - old_remainder [31:0] $end
+$scope module div $end
+$var wire 1 & clk $end
+$var wire 5 . dividend_size [4:0] $end
+$var wire 5 / divider_size [4:0] $end
+$var wire 1 ) done $end
+$var wire 5 0 old_counter [4:0] $end
+$var wire 32 1 old_divisor [31:0] $end
+$var wire 32 2 old_quotient [31:0] $end
+$var wire 32 3 old_remainder [31:0] $end
+$var reg 5 4 new_counter [4:0] $end
+$var reg 32 5 new_divisor [31:0] $end
+$var reg 32 6 new_quotient [31:0] $end
+$var reg 32 7 new_remainder [31:0] $end
+$var reg 1 ! status $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx 7
+bx 6
+bx 5
+bx 4
+bx 3
+bx 2
+bx 1
+bx 0
+b100 /
+b111 .
+bx -
+bx ,
+bx +
+bx *
+0)
+b100 (
+b111 '
+0&
+bx %
+bx $
+bx #
+bx "
+0!
+$end
+#5
+0!
+1)
+1&
+#10
+0&
+#15
+0!
+1&
+#20
+0&
+#25
+0!
+1&
+#30
+0&
+#35
+0!
+1&
+#40
+0&
+#45
+0!
+1&
+#50
+0&
+#55
+0!
+1&
+#60
+0&
+#65
+0!
+1&
+#70
+0&
+#75
+0!
+1&
+#80
+0&
+#85
+0!
+1&
+#90
+0&
+#95
+0!
+1&
+#100
+0&
+#105
+0!
+1&
+#110
+0&
+#115
+0!
+1&
+#120
+0&
+#125
+0!
+1&
+#130
+0&
+#135
+0!
+1&
+#140
+0&
+#145
+0!
+1&
+#150
+0&
+#155
+0!
+1&
+#160
+0&
+#165
+0!
+1&
+#170
+0&
+#175
+0!
+1&
+#180
+0&
+#185
+0!
+1&
+#190
+0&
+#195
+0!
+1&
+#200
+0&
+#205
+0!
+1&
+#210
+0&
+#215
+0!
+1&
+#220
+0&
+#225
+0!
+1&
+#230
+0&
+#235
+0!
+1&
+#240
+0&
+#245
+0!
+1&
+#250
+0&
+#255
+0!
+1&
+#260
+0&
+#265
+0!
+1&
+#270
+0&
+#275
+0!
+1&
+#280
+0&
+#285
+0!
+1&
+#290
+0&
+#295
+0!
+1&
+#300
+0&
+#305
+0!
+1&
+#310
+0&
+#315
+0!
+1&
+#320
+0&
+#325
+0!
+1&
+#330
+0&
+#335
+0!
+1&
+#340
+0&
+#345
+0!
+1&
+#350
+0&
+#355
+0!
+1&
+#360
+0&
+#365
+0!
+1&
+#370
+0&
+#375
+0!
+1&
+#380
+0&
+#385
+0!
+1&
+#390
+0&
+#395
+0!
+1&
+#400
+0&
+#405
+0!
+1&
+#410
+0&
+#415
+0!
+1&
+#420
+0&
+#425
+0!
+1&
+#430
+0&
+#435
+0!
+1&
+#440
+0&
+#445
+0!
+1&
+#450
+0&
+#455
+0!
+1&
+#460
+0&
+#465
+0!
+1&
+#470
+0&
+#475
+0!
+1&
+#480
+0&
+#485
+0!
+1&
+#490
+0&
+#495
+0!
+1&
+#500
+0&
