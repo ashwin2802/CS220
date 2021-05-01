@@ -21,7 +21,7 @@ module divider(done,clk,old_remainder,old_quotient,old_divisor,old_counter,divid
         end
         else if(done == 1'b1)begin
             status <= 1'b1;
-            if (old_counter < (divider_size - dividend_size + 5'd1))begin
+            if (old_counter < (divider_size - dividend_size))begin
                 new_divisor <= old_divisor >> 1;
                 new_counter <= old_counter+1;
                 if(old_remainder < 32'd0)begin
@@ -33,7 +33,7 @@ module divider(done,clk,old_remainder,old_quotient,old_divisor,old_counter,divid
                     new_quotient <= (old_quotient << 1) || 32'd1;
                 end
             end
-            else if(old_counter == (divider_size - dividend_size + 5'd1))begin
+            else if(old_counter == (divider_size - dividend_size))begin
                 if(old_remainder < 32'd0)begin
                     new_remainder <= old_remainder + old_divisor;
                     new_quotient <= old_quotient^(32'd1);

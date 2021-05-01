@@ -9,7 +9,6 @@ module div_top;
     wire [4:0] new_counter;
     wire status;
 
-    reg [31:0]dividend,divisor;
 
     divider div(done,clk,old_remainder,old_quotient,old_divisor,old_counter,divider_size,dividend_size,new_remainder,new_quotient,new_divisor,new_counter,status);
 
@@ -20,7 +19,7 @@ module div_top;
         old_counter <= new_counter;
         old_quotient <= new_quotient;
         if(status == 1'b1)begin
-            $display("t = %d: Remainder = %d  Quotient = %d Count = %d",$time,new_remainder,new_quotient,new_counter);
+            $display("t = %d: Divisor= %d Remainder = %d  Quotient = %d Count = %d",$time,old_divisor,old_remainder,old_quotient,old_counter);
         end
     end
 
@@ -37,11 +36,14 @@ module div_top;
     end
 
     initial begin
+        #5
         old_remainder <= 32'd67;
+        old_quotient <= 32'd0;
         old_divisor <= 32'd14;
+        old_counter <= 5'd0;
         dividend_size <= 5'd7;
         divider_size <= 5'd4;
-        #5
+        #15
         done <= 1'b1;
     end
 
