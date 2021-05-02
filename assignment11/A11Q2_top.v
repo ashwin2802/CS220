@@ -19,14 +19,14 @@ module div_top;
     always @(negedge clk ) begin
         if(done ==1)begin
             if(index !=0)begin
-                index <= index+1;
-                inp <= 1'b1;
-                dividend <= dividend_list[index];
-                divisor <= divisor_list[index];
-                dividend_length <= dividend_length_list[index];
-                divisor_length <= divisor_length_list[index];
                 $display("Time =%d : Dividend = %d Divisor = %d Remainder = %d Quotient = %d Additions = %d Subtractions = %d",$time,dividend,divisor,remainder,quotient,add_count,sub_count);
             end
+            index <= index+1;
+            inp <= 1'b1;
+            dividend <= dividend_list[index];
+            divisor <= divisor_list[index];
+            dividend_length <= dividend_length_list[index];
+            divisor_length <= divisor_length_list[index];
             
         end
         else begin
