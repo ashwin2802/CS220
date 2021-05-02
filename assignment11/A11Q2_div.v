@@ -29,26 +29,26 @@ module divider(clk,dividend,divisor,inp,dividend_length,divisor_length,done,add_
         end
         else if(inp == 1'b0)begin
             if (counter > 0) begin
-                if($signed(remainder)>=0)begin
-                    remainder <= remainder - div;
-                    sub_count <= sub_count+1;
-                end
-                else if($signed(remainder)<0)begin
-                    remainder <= remainder +div;
-                    add_count <= add_count+1;
+                if($signed(remainder)<0)begin
+                    remainder = remainder +div;
+                    add_count = add_count+1;
                     quotient = quotient^1;
                 end
-                quotient = (quotient<<1) || 1'b1;
-                counter <= counter -1;
-                div <= div>>1;
-            end
-            else if(counter == 0)begin
-                if($signed(remainder)<0)begin
-                    remainder <= remainder + div;
-                    quotient <= quotient^1;
-                    add_count <= add_count+1;
+                else begin
+                    remainder = remainder - div;
+                    sub_count = sub_count+1;
                 end
+                quotient = (quotient<<1) | 1'b1;
+                counter = counter -1;
+                div<= div>>1;
+                if(counter == 0)begin
+                    if($signed(remainder)<0)begin
+                        remainder = remainder + div;
+                        quotient = quotient ^ 1;
+                        add_count = add_count+1;
+                    end
                 done <= 1'b1;
+                end
             end
         end
     end
