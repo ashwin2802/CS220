@@ -8,7 +8,7 @@ module div_top;
     wire [31:0] new_remainder,new_quotient,new_divisor;
     wire [4:0] new_counter;
     wire status;
-
+    
     divider div(clk,inp,dividend,dividend_length,divisor,divisor_length,quotient,remainder,add_count,sub_count,done);
 
     always @(negedge clk ) begin
@@ -34,9 +34,6 @@ module div_top;
     end
 
     initial begin
-        clk <= 1'b1;
-        done <= 1'b0;
-
         index <=1'b0;
         inp <= 1'b1;
 
