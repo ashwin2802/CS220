@@ -11,7 +11,10 @@ module divider(clk,inp,dividend,dividend_length,divisor,divisor_length,quotient,
     reg [5:0] counter;
 
     initial begin
-        status <= 1'b0;
+        remainder <= 31'd0;
+        quotient <= 31'd0;
+        div <= 31'd0;
+        done <= 1'b1;
     end
 
     always @(posedge clk ) begin
@@ -54,12 +57,7 @@ module divider(clk,inp,dividend,dividend_length,divisor,divisor_length,quotient,
                     done <= 1'b1;
                 end
             end
-            else begin
-                status <= 1'b0;
-            end
         end
     end
 
-
-
-endmodule
+endmodule;
