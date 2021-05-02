@@ -14,12 +14,24 @@ module div_top;
 
 
     always @(negedge clk ) begin
-            old_remainder <= new_remainder;
-            old_divisor <= new_divisor;
-            old_counter <= new_counter;
-            old_quotient <= new_quotient;
-        if(status == 1'b1)begin
-            $display("t = %d: Divisor= %d Remainder = %d  Quotient = %d Count = %d",$time,new_divisor,$signed(new_remainder),new_quotient,new_counter);
+        if(done ==1)begin
+            if(index !=0)begin
+                $display("Time =%d : Dividend = %d Divisor = %d Remainder = %d Quotient = %d Additions = %d Subtractions = %d",$time,dividend,divisor,remainder,quotient,add_count,sub_count);
+            end
+            index <= index+1;
+            inp <= 1'b1;
+            dividend <= dividend_list[index];
+            divisor <= divisor_list[index];
+            dividend_length <= dividend_length_list[index];
+            divisor_length <= divisor_length_list[index];
+            
+        end
+        else begin
+            inp <= 1'b0;
+        end
+
+        if(index > 10)begin
+            $finish;
         end
     end
 
