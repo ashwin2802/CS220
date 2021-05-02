@@ -2,13 +2,18 @@
 
 module div_top;
 
-    reg [31:0] old_remainder,old_quotient,old_divisor;
-    reg [4:0]divider_size,dividend_size,old_counter;
-    reg clk,done;
-    wire [31:0] new_remainder,new_quotient,new_divisor;
-    wire [4:0] new_counter;
-    wire status;
-    
+    reg clk,inp;
+    reg[31:0] dividend,divisor;
+    reg[4:0] dividend_length,divisor_length;
+
+    wire done;
+    wire [4:0] add_count,sub_count;
+    wire [31:0] quotient,remainder;
+
+    reg[31:0] dividend_list[0:9], divisor_list[0:9];
+    reg[4:0] dividend_length_list[0:9], divisor_length_list[0:9]; 
+    reg[4:0] index;
+
     divider div(clk,inp,dividend,dividend_length,divisor,divisor_length,quotient,remainder,add_count,sub_count,done);
 
     always @(negedge clk ) begin
@@ -32,6 +37,7 @@ module div_top;
             $finish;
         end
     end
+
 
     initial begin
         index <=1'b0;
@@ -88,10 +94,13 @@ module div_top;
         divisor_length_list[9] <= 7;
     end
 
-    initial begin
+    initial begin 
         forever begin
-            #5   
-            clk <= ~clk;
+            clk=0;
+            #5
+            clk=1;
+            #5
+            clk=0;
         end
     end
 
@@ -100,4 +109,5 @@ module div_top;
     //     $dumpvars(0, div_top);
     // end
 
-endmodule
+endmodule;
+
