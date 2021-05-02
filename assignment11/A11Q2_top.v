@@ -14,7 +14,7 @@ module div_top;
     reg[4:0] dividend_length_list[0:9], divisor_length_list[0:9]; 
     reg[4:0] index;
 
-    divider div(clk,dividend,divisor,inp,dividend_length,divisor_length,done,add_count,sub_count,quotient,remainder);
+    divider div(clk,inp,dividend,dividend_length,divisor,divisor_length,quotient,remainder,add_count,sub_count,done);
 
     always @(negedge clk ) begin
         if(done ==1)begin
@@ -33,7 +33,7 @@ module div_top;
             inp <= 1'b0;
         end
 
-        if(index > 10)begin
+        if(index > 4'd10)begin
             $finish;
         end
     end
@@ -58,10 +58,10 @@ module div_top;
         dividend_length_list[2] <= 7;
         divisor_length_list[2] <= 4;
 
-        dividend_list[3] <= 77;
-        divisor_list[3] <= 13;
-        dividend_length_list[3] <= 7;
-        divisor_length_list[3] <= 4;
+        dividend_list[3] <= 13;
+        divisor_list[3] <= 77;
+        dividend_length_list[3] <= 4;
+        divisor_length_list[3] <= 7;
 
         dividend_list[4] <= 87;
         divisor_list[4] <= 16;
@@ -88,16 +88,10 @@ module div_top;
         dividend_length_list[8] <= 3;
         divisor_length_list[8] <= 4;
 
-        dividend_list[9] <= 67;
-        divisor_list[9] <= 14;
-        dividend_length_list[9] <= 7;
-        divisor_length_list[9] <= 4;
-
-        dividend <= dividend_list[0];
-        divisor <= divisor_list[0];
-        dividend_length <= dividend_length_list[0];
-        divisor_length <= divisor_length_list[0];
-
+        dividend_list[9] <= 156;
+        divisor_list[9] <= 69;
+        dividend_length_list[9] <= 8;
+        divisor_length_list[9] <= 7;
     end
 
     initial begin 
@@ -109,14 +103,10 @@ module div_top;
             clk=0;
         end
     end
-    initial begin
-        #1000
-        $finish;
-    end
 
-     initial begin
-        $dumpfile("div.top");
-        $dumpvars(0, div_top);
-     end
+    // initial begin
+    //     $dumpfile("div.top");
+    //     $dumpvars(0, div_top);
+    // end
 
 endmodule;
