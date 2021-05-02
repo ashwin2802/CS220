@@ -20,39 +20,28 @@ module divider(done,clk,old_remainder,old_quotient,old_divisor,old_counter,divid
                 new_counter <= old_counter;
             end
         end
-        else if(done == 1'b1)begin
-            if ((old_counter < (dividend_size - divider_size ))&& (status ==1'b1))begin
-                new_divisor <= old_divisor >> 1;
-                new_counter <= old_counter+1;
-                if(old_remainder[31] == 1'b1)begin
-                    new_remainder <= old_remainder + old_divisor;
-                    new_quotient = (old_quotient^(32'd1))<<1;
-                    new_quotient[0] = 1'b1;
+        else if(inp == 1'b0)begin
+            if (counter > 0) begin
+                if($signed(remainder)<0)begin
+                    remainder = remainder +div;
+                    add_count = add_count+1;
+                    quotient = quotient^1;
                 end
-                else if(old_remainder[31] == 1'b0)begin
-                    new_remainder <= old_remainder - old_divisor;
-                    new_quotient = (old_quotient << 1);
-                    new_quotient[0] = 1'b1;
+                else begin
+                    remainder = remainder - div;
+                    sub_count = sub_count+1;
                 end
-            end
-            else if((old_counter >= (dividend_size - divider_size)) && (status ==1'b1) )begin
-                if(old_remainder[31] == 1'b1)begin
-                    new_remainder <= old_remainder + old_divisor;
-                    new_quotient <= (old_quotient^(32'd1));
-                    new_counter <= old_counter+1;
-                    new_divisor <= old_divisor;
-                    $display("Extra round entered");
+                quotient = (quotient<<1) | 1'b1;
+                counter = counter -1;
+                div<= div>>1;
+                if(counter == 0)begin
+                    if($signed(remainder)<0)begin
+                        remainder = remainder + div;
+                        quotient = quotient ^ 1;
+                        add_count = add_count+1;
+                    end
+                done <= 1'b1;
                 end
-                else if(old_remainder[31] == 1'b0)begin
-                    new_remainder <= old_remainder;
-                    new_quotient <= old_quotient;
-                    new_counter <= old_counter+1;
-                    new_divisor <= old_divisor;
-                    status <=1'b0;
-                end
-            end
-            else begin
-                status <= 1'b0;
             end
         end
     end
