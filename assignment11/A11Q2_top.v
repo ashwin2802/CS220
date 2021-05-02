@@ -9,13 +9,7 @@ module div_top;
     wire [4:0] new_counter;
     wire status;
 
-
-    divider div(done,clk,old_remainder,old_quotient,old_divisor,old_counter,divider_size,dividend_size,new_remainder,new_quotient,new_divisor,new_counter,status);
-
-<<<<<<< HEAD
-=======
     divider div(clk,inp,dividend,dividend_length,divisor,divisor_length,quotient,remainder,add_count,sub_count,done);
->>>>>>> Pre-submission modifications for Assignment 11
 
     always @(negedge clk ) begin
         if(done ==1)begin
@@ -40,10 +34,9 @@ module div_top;
     end
 
     initial begin
-<<<<<<< HEAD
         clk <= 1'b1;
         done <= 1'b0;
-=======
+
         index <=1'b0;
         inp <= 1'b1;
 
@@ -96,7 +89,6 @@ module div_top;
         divisor_list[9] <= 69;
         dividend_length_list[9] <= 8;
         divisor_length_list[9] <= 7;
->>>>>>> Pre-submission modifications for Assignment 11
     end
 
     initial begin
@@ -105,55 +97,10 @@ module div_top;
             clk <= ~clk;
         end
     end
-<<<<<<< HEAD
-
-    initial begin
-        
-        old_remainder <= 32'd67;
-        old_quotient <= 32'd0;
-        old_divisor <= 32'd14;
-        old_counter <= 5'd0;
-        dividend_size <= 5'd7;
-        divider_size <= 5'd4;
-        #10
-        done <= 1'b1;
-        
-/*         #95
-        done <=1'b0;
-        old_remainder <= 32'd99;
-        old_quotient <= 32'd0;
-        old_divisor <= 32'd15;
-        old_counter <= 5'd0;
-        dividend_size <= 5'd7;
-        divider_size <= 5'd4;
-        #5
-        done <= 1'b1; */
-    end
-
-    initial begin
-        #500
-        $finish;
-    end
-
-        // gtkwave debugging
-
-    initial begin
-        $dumpfile("divide.vcd");
-        $dumpvars(0, div_top);
-    end 
-
-
-
-
-
-
-
-endmodule
-=======
 
     // initial begin
     //     $dumpfile("div.top");
     //     $dumpvars(0, div_top);
     // end
->>>>>>> Pre-submission modifications for Assignment 11
 
+endmodule
