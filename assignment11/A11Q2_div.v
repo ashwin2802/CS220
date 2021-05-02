@@ -1,62 +1,56 @@
-module divider(done,clk,old_remainder,old_quotient,old_divisor,old_counter,divider_size,dividend_size,new_remainder,new_quotient,new_divisor,new_counter,status);
-    input [31:0] old_remainder,old_quotient,old_divisor;
-    input [4:0]divider_size,dividend_size,old_counter;
-    input clk,done;
-    output reg [31:0] new_remainder,new_quotient,new_divisor;
-    output reg [4:0] new_counter;
-    output reg status;
+module divider(clk,dividend,divisor,inp,dividend_length,divisor_length,done,add_count,sub_count,quotient,remainder);
+    input clk,inp;
+    input[31:0] dividend,divisor;
+    input[4:0] dividend_length,divisor_length;
+
+    output reg done;
+    output reg [4:0] add_count,sub_count;
+    output reg [31:0] quotient,remainder;
+    
+    reg [31:0] div;
+    reg [5:0] counter;
 
     initial begin
-        status <= 1'b0;
+        remainder <= 31'd0;
+        quotient <= 31'd0;
+        div <= 31'd0;
+        done <= 1'b1;
     end
 
     always @(posedge clk ) begin
-        if(done == 1'b0)begin
-            status <= 1'b1;
-            if(dividend_size - divider_size > 0)begin
-                new_remainder <= old_remainder;
-                new_divisor <= (old_divisor << (dividend_size - divider_size));
-                new_quotient <= old_quotient;
-                new_counter <= old_counter;
-            end
+        if(inp == 1'b1)begin
+            remainder <= dividend;
+            quotient <= 31'd0;
+            div <= divisor << (dividend_length - divisor_length);
+            add_count <= 0;
+            sub_count <= 0;
+            counter <= dividend_length-divisor_length + 1;
+            done <=1'b0;
         end
-        else if(done == 1'b1)begin
-            if ((old_counter < (dividend_size - divider_size ))&& (status ==1'b1))begin
-                new_divisor <= old_divisor >> 1;
-                new_counter <= old_counter+1;
-                if(old_remainder[31] == 1'b1)begin
-                    new_remainder <= old_remainder + old_divisor;
-                    new_quotient = (old_quotient^(32'd1))<<1;
-                    new_quotient[0] = 1'b1;
+        else if(inp == 1'b0)begin
+            if (counter > 0) begin
+                if($signed(remainder)>=0)begin
+                    remainder <= remainder - div;
+                    sub_count <= sub_count+1;
                 end
-                else if(old_remainder[31] == 1'b0)begin
-                    new_remainder <= old_remainder - old_divisor;
-                    new_quotient = (old_quotient << 1);
-                    new_quotient[0] = 1'b1;
+                else if($signed(remainder)<0)begin
+                    remainder <= remainder +div;
+                    add_count <= add_count+1;
+                    quotient = quotient^1;
                 end
+                quotient = (quotient<<1) || 1'b1;
+                counter <= counter -1;
+                div <= div>>1;
             end
-            else if((old_counter >= (dividend_size - divider_size)) && (status ==1'b1) )begin
-                if(old_remainder[31] == 1'b1)begin
-                    new_remainder <= old_remainder + old_divisor;
-                    new_quotient <= (old_quotient^(32'd1));
-                    new_counter <= old_counter+1;
-                    new_divisor <= old_divisor;
-                    $display("Extra round entered");
+            else if(counter == 0)begin
+                if($signed(remainder)<0)begin
+                    remainder <= remainder + div;
+                    quotient <= quotient^1;
+                    add_count <= add_count+1;
                 end
-                else if(old_remainder[31] == 1'b0)begin
-                    new_remainder <= old_remainder;
-                    new_quotient <= old_quotient;
-                    new_counter <= old_counter+1;
-                    new_divisor <= old_divisor;
-                    status <=1'b0;
-                end
-            end
-            else begin
-                status <= 1'b0;
+                done <= 1'b1;
             end
         end
     end
 
-
-
-endmodule
+endmodule;
